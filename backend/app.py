@@ -1,30 +1,18 @@
-import streamlit as st
-import requests
+from flask import Flask, jsonify
 
-# Başlık
-st.title('Movie Database')
-st.write('Welcome to the Movie Database!')
+app = Flask(__name__)
 
-# API'den veri çekme
-response = requests.get("http://127.0.0.1:5000/api/movies")  # Flask API'nin yeni portunu kullan
+# Sample movie data
+movies = [
+    {"title": "Inception", "description": "A mind-bending thriller about dreams within dreams."},
+    {"title": "The Matrix", "description": "A hacker learns the truth about the nature of reality."},
+    {"title": "The Dark Knight", "description": "Batman faces off against the Joker in Gotham City."},
+]
 
-# Yanıtın durumunu kontrol et
-st.write(f"Response Status Code: {response.status_code}")
+@app.route('/api/movies')
+def get_movies():
+    # Return movies as JSON response
+    return jsonify(movies)
 
-if response.status_code == 200:
-    try:
-        # Gelen JSON verisini çözümle
-        movies = response.json()
-        if movies:
-            st.write("Movies List:")
-            # Filmleri daha okunabilir şekilde listelemek için
-            for movie in movies:
-                st.write(f"**Title:** {movie.get('title', 'No Title')}")
-                st.write(f"**Description:** {movie.get('description', 'No Description')}")
-                st.write("---")
-        else:
-            st.write("No movies found.")
-    except ValueError:
-        st.error("JSON verisi alınamadı!")
-else:
-    st.error(f"API isteği başarısız oldu! Status code: {response.status_code}")
+if __name__ == "__main__":
+    app.run(debug=True)
