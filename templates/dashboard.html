@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #4CAF50;
+            padding: 15px;
+            color: white;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            margin-left: 15px;
+        }
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+        .dashboard-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-top: 50px;
+        }
+        .button-container {
+            display: flex;
+            gap: 40px;
+            margin-top: 30px;
+        }
+        .button-container .button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            width: 250px; /* Buton genişliğini artırdık */
+            height: 500px; /* Buton yüksekliğini artırdık */
+            text-align: center;
+        }
+        .button-container .button img {
+            width: 200px;  /* Resmin genişliği */
+            height: 400px; /* Resmin yüksekliği */
+            margin-bottom: 10px;
+        }
+        .button-container button:hover {
+            background-color: #45a049;
+        }
+        .button-container button:active {
+            background-color: #388e3c;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div>Dashboard</div>
+        <div>
+            <a href="/profile">Profil</a>
+            <a href="/logout">Çıkış Yap</a>  <!-- Çıkış yap linki -->
+        </div>
+    </div>
+    
+
+    <div class="dashboard-container">
+        <h2>Hoşgeldiniz!</h2>
+        <div class="button-container">
+            <form action="/add_movie" method="GET">
+                <button type="submit" class="button">
+                    <img src="filmEkle.png" alt="Film Ekle">
+                    Film Ekle
+                </button>
+            </form>
+            <form action="/movies" method="GET">
+                <button type="submit" class="button">
+                    <img src="filmler.png" alt="Filmler">
+                    Filmler
+                </button>
+            </form>
+            <form action="/favorites" method="GET">
+                <button type="submit" class="button">
+                    <img src="favoriler.png" alt="Favoriler">
+                    Favoriler
+                </button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
