@@ -1,0 +1,13 @@
+users:
+- email: user1@example.com
+  password: password1
+  username: user1
+- email: user2@example.com
+  password: password2
+  username: user2
+- email: eren.ergani9@gmail.com
+  password: '002345'
+  username: eren
+- email: user3@example.com
+  password: 123123123
+  username: user3
