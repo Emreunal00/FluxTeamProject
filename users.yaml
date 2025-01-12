@@ -14,3 +14,6 @@ users:
 - email: admin@admin.com
   password: '123'
   username: admin
+- email: umutemre2004@gmail.com
+  password: Emre2004
+  username: "Emre \xDCnal"

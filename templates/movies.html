@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Film Arama</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Film Arama</h1>
+
+        <!-- Dashboard'a dönüş butonu -->
+        <a href="/dashboard" class="btn btn-secondary mb-4">Dashboard</a>
+
+        <!-- Film arama formu -->
+        <form method="POST" action="/movies" class="mb-4">
+            <div class="input-group">
+                <input 
+                    type="text" 
+                    name="movie_name" 
+                    class="form-control" 
+                    placeholder="Film adını giriniz..." 
+                    required>
+                <button type="submit" class="btn btn-primary">Ara</button>
+            </div>
+        </form>
+
+        <!-- Film bilgileri -->
+        {% if movie_data %}
+            {% if movie_data.Response == "True" %}
+                <div class="card">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img 
+                                src="{{ movie_data.Poster }}" 
+                                class="img-fluid rounded-start" 
+                                alt="Film Posteri" 
+                                onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ movie_data.Title }}</h5>
+                                <p class="card-text">
+                                    <strong>Yıl:</strong> {{ movie_data.Year }}<br>
+                                    <strong>Tür:</strong> {{ movie_data.Genre }}<br>
+                                    <strong>Yönetmen:</strong> {{ movie_data.Director }}<br>
+                                    <strong>Oyuncular:</strong> {{ movie_data.Actors }}<br>
+                                    <strong>IMDB Puanı:</strong> {{ movie_data.imdbRating }}<br>
+                                    <strong>Konu:</strong> {{ movie_data.Plot }}
+                                </p>
+                                <!-- Favorilere ekle -->
+                                <form method="POST" action="/add_to_favorites">
+                                    <input type="hidden" name="movie_data" value="{{ movie_data | tojson }}">
+                                    <button type="submit" class="btn btn-success mt-3">Favorilere Ekle</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <p>{{ movie_data.Error }}</p>
+            {% endif %}
+        {% endif %}
+    </div>
+</body>
+</html>
