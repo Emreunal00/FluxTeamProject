@@ -1,8 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import yaml
+import requests
+import json  # JSON verisini işlemek için eklenmiştir
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key"  # Session için gerekli olan secret_key
+OMDB_API_KEY = "f91c77a2"  # OMDB API anahtarı
 
 # Kullanıcıları YAML dosyasından oku
 def load_users():
@@ -54,6 +57,24 @@ def update_user_info(username, new_username=None, new_password=None):
             return True
 
     return False
+
+# Kullanıcının favori filmlerini almak için
+def load_favorites(username):
+    users = load_users()
+    user = next((user for user in users if user['username'] == username), None)
+    
+    if user and 'favorites' in user:
+        return user['favorites']
+    return []
+
+# Kullanıcının favori filmlerini kaydetmek için
+def save_favorites(username, favorites):
+    users = load_users()
+    user = next((user for user in users if user['username'] == username), None)
+    
+    if user:
+        user['favorites'] = favorites
+        save_users(users)
 
 @app.route('/')
 def home():
@@ -131,6 +152,65 @@ def update_profile():
         return redirect(url_for('profile'))  # Profil sayfasına yönlendir
     else:
         return "Kullanıcı bilgileri güncellenemedi!"  # Hata mesajı
+
+# Filmler rotası
+@app.route('/movies', methods=['GET', 'POST'])
+def movies():
+    if 'user' not in session:  # Eğer oturum yoksa giriş sayfasına yönlendir
+        return redirect(url_for('home'))
+    
+    movie_data = None
+    if request.method == 'POST':
+        movie_name = request.form['movie_name']
+        
+        # API isteğini yap
+        response = requests.get(f"http://www.omdbapi.com/?apikey={OMDB_API_KEY}&t={movie_name}")
+        
+        # API yanıtını kontrol et
+        if response.status_code == 200:
+            movie_data = response.json()  # JSON verisini parse etmeye çalış
+        else:
+            return "Film verisi alınamadı.", 400  # Eğer API'den veri alınamadıysa, hata döndür
+        
+    return render_template('movies.html', movie_data=movie_data)
+
+# Favorilere eklemek için rota
+import json  # json modülünü içe aktar
+
+@app.route('/add_to_favorites', methods=['POST'])
+def add_to_favorites():
+    if 'user' not in session:
+        return redirect(url_for('home'))
+    
+    username = session['user']
+    movie_data = request.form['movie_data']  # Film bilgisini al
+    
+    # Tek tırnakları çift tırnağa çevir (bu gerekli olabilir çünkü bazen JSON verisi tek tırnak kullanabiliyor)
+    movie_data = movie_data.replace("'", '"')
+    
+    try:
+        # JSON verisini Python dict'e dönüştür
+        movie_dict = json.loads(movie_data)  # JSON verisini Python objesine dönüştür
+    except json.JSONDecodeError:
+        return "Geçersiz JSON verisi", 400  # Eğer JSON geçersizse hata mesajı döndür
+    
+    favorites = load_favorites(username)
+    favorites.append(movie_dict)
+    save_favorites(username, favorites)
+    
+    return redirect(url_for('favorites'))  # Favoriler sayfasına yönlendir
+
+
+# Favori filmleri gösterme
+@app.route('/favorites')
+def favorites():
+    if 'user' not in session:
+        return redirect(url_for('home'))
+    
+    username = session['user']
+    favorite_movies = load_favorites(username)
+    
+    return render_template('favorites.html', favorite_movies=favorite_movies)
 
 if __name__ == "__main__":
     app.run(debug=True)
