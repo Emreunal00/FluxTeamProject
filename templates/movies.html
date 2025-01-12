@@ -40,6 +40,12 @@
                 </div>
             </form>
         </div>
+
+        {% if error_message %}
+            <div class="alert alert-danger text-center" role="alert">
+                {{ error_message }}
+            </div>
+        {% endif %}
         
         <!-- Benzer Filmler -->
         {% if movie_data %}

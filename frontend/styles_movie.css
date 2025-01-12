@@ -192,3 +192,9 @@ body {
     line-height: 1.5;
     color: #BDC3C7;
 }
+
+.text-center {
+    text-align: center;
+    margin-top: 20px;
+}
+

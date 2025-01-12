@@ -159,9 +159,11 @@ def update_profile():
 @app.route('/movies', methods=['GET', 'POST'])
 def movies():
     if 'user' not in session:  # Eğer oturum yoksa giriş sayfasına yönlendir
-        return redirect(url_for('home'))  
+        return redirect(url_for('home'))
     
     movie_data = None
+    error_message = None  # Hata mesajını saklayacağımız değişken
+
     if request.method == 'POST':
         movie_name = request.form['movie_name']
         
@@ -170,17 +172,14 @@ def movies():
         
         # API yanıtını kontrol et
         if response.status_code == 200:
-            movie_data = response.json()
-            print(movie_data)  # API yanıtını kontrol et
-            if movie_data.get('Response') == 'False':
-                movie_data = None
+            movie_data = response.json()  # JSON verisini parse etmeye çalış
+            if movie_data.get('Response') == 'False':  # Eğer hiçbir film bulunmazsa
+                error_message = "Aradığınız filme dair sonuç bulunamadı."
+                movie_data = None  # film verisi yoksa boş bırak
         else:
-            return "Film verisi alınamadı.", 400  # Eğer API'den veri alınamadıysa, hata döndür
+            error_message = "Film verisi alınamadı. Lütfen tekrar deneyin."
         
-        if 'Search' in movie_data:
-            print(movie_data['Search'])
-        
-    return render_template('movies.html', movie_data=movie_data)
+    return render_template('movies.html', movie_data=movie_data, error_message=error_message)
 
 
 # Favorilere eklemek için rota
