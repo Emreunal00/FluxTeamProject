@@ -11,3 +11,6 @@ users:
 - email: user3@example.com
   password: 123123123
   username: user3
+- email: admin@admin.com
+  password: '123'
+  username: admin
