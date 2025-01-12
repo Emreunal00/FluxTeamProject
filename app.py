@@ -2,8 +2,10 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import yaml
 import requests
 import json  # JSON verisini işlemek için eklenmiştir
+from flask_sqlalchemy import SQLAlchemy
+from backend.models.user import db, User
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='frontend')
 app.secret_key = "your_secret_key"  # Session için gerekli olan secret_key
 OMDB_API_KEY = "f91c77a2"  # OMDB API anahtarı
 
@@ -175,8 +177,6 @@ def movies():
     return render_template('movies.html', movie_data=movie_data)
 
 # Favorilere eklemek için rota
-import json  # json modülünü içe aktar
-
 @app.route('/add_to_favorites', methods=['POST'])
 def add_to_favorites():
     if 'user' not in session:
@@ -200,7 +200,6 @@ def add_to_favorites():
     
     return redirect(url_for('favorites'))  # Favoriler sayfasına yönlendir
 
-
 # Favori filmleri gösterme
 @app.route('/favorites')
 def favorites():
@@ -211,6 +210,11 @@ def favorites():
     favorite_movies = load_favorites(username)
     
     return render_template('favorites.html', favorite_movies=favorite_movies)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///your_database.db'  # Veritabanı bağlantı URI'si
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db.init_app(app)
 
 if __name__ == "__main__":
     app.run(debug=True)

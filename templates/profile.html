@@ -4,86 +4,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profil Sayfası</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-        }
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #4CAF50;
-            padding: 15px;
-            color: white;
-        }
-        .navbar a {
-            color: white;
-            text-decoration: none;
-            font-size: 16px;
-            margin-left: 15px;
-        }
-        .navbar a:hover {
-            text-decoration: underline;
-        }
-        .profile-container {
-            width: 50%;
-            margin: 50px auto;
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .profile-info {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .profile-info img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            margin-right: 20px;
-        }
-        .profile-info p {
-            margin: 5px 0;
-        }
-        .update-btn {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            border: none;
-            border-radius: 5px;
-            color: white;
-            cursor: pointer;
-        }
-        .update-btn:hover {
-            background-color: #45a049;
-        }
-    </style>
+    <link rel="stylesheet" href="../frontend/styles_profile.css">
 </head>
 <body>
 
     <div class="navbar">
-        <div>Profil</div>
         <div>
-            <a href="/dashboard">Dashboard</a>
-            <a href="/logout">Çıkış Yap</a>
+            <a href="/dashboard" class="flux-btn">FLUX</a>
+        </div>
+        <div>
+            <a href="/logout" class="logout-btn">Çıkış Yap</a>
         </div>
     </div>
 
     <div class="profile-container">
         <h2>Profil Bilgileriniz</h2>
         <div class="profile-info">
-            <img src="{{ user_profile_image }}" alt="Profil Resmi">
+            <img src="default-profile.jpg" alt="Profil Resmi" id="profile-image">
             <div>
                 <p><strong>Kullanıcı Adı:</strong> {{ user_username }}</p>
                 <p><strong>E-posta:</strong> {{ user_email }}</p>
             </div>
         </div>
-        
-        <button class="update-btn">Profil Resmini Güncelle</button>
+
+        <button class="update-btn" id="update-profile-btn">Profil Resmini Güncelle</button>
+
+        <div id="image-upload-container" style="display: none;">
+            <form id="image-upload-form" enctype="multipart/form-data">
+                <input type="file" name="profileImage" accept="image/*" id="profile-image-input">
+                <button type="submit" class="btn-success">Yükle</button>
+            </form>
+        </div>
     </div>
 
+    <!-- JavaScript kodları burada -->
+    <script>
+        window.onload = function() {
+            fetch('/get-user-profile')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('profile-image').src = data.profile_image || 'default-profile.jpg';
+                })
+                .catch(error => console.error('Error fetching profile data:', error));
+        };
+
+        const updateProfileBtn = document.getElementById("update-profile-btn");
+        const profileImageInput = document.getElementById("profile-image-input");
+
+        updateProfileBtn.addEventListener("click", function() {
+            profileImageInput.click();
+        });
+
+        profileImageInput.addEventListener("change", function() {
+            const file = profileImageInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onloadend = function() {
+                    document.getElementById("profile-image").src = reader.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
 </body>
 </html>

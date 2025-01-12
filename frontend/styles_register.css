@@ -1,0 +1,69 @@
+/* Genel Ayarlar */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #121212; /* Koyu arka plan */
+    color: #FFFFFF; /* Beyaz metin */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Sayfa yüksekliği */
+}
+
+/* Kayıt Ol Sayfası */
+.register-container {
+    background-color: #1C1C1C; /* Koyu gri zemin */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; /* Yatayda ve dikeyde ortalama */
+}
+
+.register-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #3498DB; /* Mavi başlık */
+}
+
+.register-container input {
+    width: 92%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #333333; /* Koyu sınır */
+    border-radius: 5px;
+    background-color: #1C1C1C;
+    color: #FFFFFF;
+}
+
+.register-container button {
+    width: 100%;
+    padding: 10px;
+    background-color: #2980B9; /* Mavi buton */
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.register-container button:hover {
+    background-color: #3498DB; /* Mavi buton hover */
+}
+
+.register-container p {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.register-container p a {
+    color: #3498DB;
+    text-decoration: none;
+}
+
+.register-container p a:hover {
+    text-decoration: underline;
+}

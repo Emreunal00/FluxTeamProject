@@ -1,149 +1,17 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            background-color: rgb(40, 41, 76);
-        }
-        .navbar .flux-btn {
-            background-color: #4CAF50;  /* Buton yeşil rengi */
-            color: white;
-            padding: 10px 20px;
-            font-size: 18px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .navbar .flux-btn:hover {
-            background-color: #45a049;  /* Buton üzerine gelindiğinde renk değişimi */
-        }
-        
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: rgb(57, 40, 86);
-            padding: 15px;
-            color: white;
-        }
-        .navbar .dashboard {
-            text-align: left;
-        }
-        .navbar a {
-            color: white;
-            text-decoration: none;
-            font-size: 16px;
-            margin-left: 15px;
-        }
-        .navbar a:hover {
-            text-decoration: underline;
-        }
-        .dashboard-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            margin-top: 50px;
-        }
-        .dashboard-container h2 {
-            font-size: 50px;  /* Hoşgeldiniz yazısını büyüttük */
-            color: white;
-            margin-bottom: 20px;
-        }
-        .button-container {
-            display: flex;
-            gap: 40px;
-            margin-top: 30px;
-        }
-        .button-container .button {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            background-color: rgb(67, 20, 188);
-            border: none;
-            border-radius: 5px;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            width: 250px; /* Buton genişliğini artırdık */
-            height: 500px; /* Buton yüksekliğini artırdık */
-            text-align: center;
-        }
-
-        .input-group input {
-            font-size: 18px; /* Arama çubuğunu büyüttük */
-            padding: 10px;
-            width: 500px;
-            margin-right: 10px;
-        }
-
-        .input-group button {
-            font-size: 20px; /* Arama butonunu büyüttük */
-            padding: 10px;
-        }
-
-        /* Profil Butonu ve Dropdown Menüsü */
-        .profile-container {
-            position: relative;
-            display: inline-block;
-            margin-left: auto;
-        }
-
-        .profile-btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            border-radius: 5px;
-        }
-
-        .profile-btn:hover {
-            background-color: #45a049;
-        }
-
-        /* Dropdown Menü Başlangıçta Gizli */
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            background-color: #333;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-            z-index: 1;
-            border-radius: 5px;
-        }
-
-        /* Menü Elemanları */
-        .dropdown-item {
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            color: white;
-            font-size: 1.2em;
-        }
-
-        .dropdown-item:hover {
-            background-color: #555;
-        }
-
-        /* Profil Butonunun Üzerine Gelindiğinde Menü Görünür */
-        .profile-container:hover .dropdown-menu {
-            display: block;
-        }
-    </style>
+    <title>FLUX Dashboard</title>
+    <!-- CSS Bağlantısı -->
+    <link rel="stylesheet" href="../frontend/styles.css"> <!-- styles.css'in doğru dizin yolunu belirtin -->
 </head>
 <body>
 
+    <!-- Navbar -->
     <div class="navbar">
-        <a href="/dashboard" class="flux-btn">FLUX</a>  <!-- FLUX butonuna yönlendirme ekledik -->
+        <a href="/dashboard" class="flux-btn">FLUX</a> <!-- FLUX butonu -->
         <div class="profile-container">
             <button class="profile-btn">Profil</button>
             <div class="dropdown-menu">
@@ -151,11 +19,13 @@
                 <a href="/favorites" class="dropdown-item">Favoriler</a>
             </div>
         </div>
-        <a href="/logout">Çıkış Yap</a>  <!-- Çıkış yap linki -->
+        <a href="/logout" class="logout-btn">Çıkış Yap</a>
     </div>
     
+    <!-- Dashboard Container -->
     <div class="dashboard-container">
         <h2>FLUX</h2>
+        <!-- Arama Formu -->
         <div class="button-container">
             <form method="POST" action="/movies" class="mb-4">
                 <div class="input-group">
@@ -169,6 +39,8 @@
                 </div>
             </form>
         </div>
+        
+        <!-- Film Bilgileri -->
         {% if movie_data %}
             {% if movie_data.Response == "True" %}
                 <div class="card">
@@ -191,7 +63,7 @@
                                     <strong>IMDB Puanı:</strong> {{ movie_data.imdbRating }}<br>
                                     <strong>Konu:</strong> {{ movie_data.Plot }}
                                 </p>
-                                <!-- Favorilere ekle -->
+                                <!-- Favorilere Ekleme Formu -->
                                 <form method="POST" action="/add_to_favorites">
                                     <input type="hidden" name="movie_data" value="{{ movie_data | tojson }}">
                                     <button type="submit" class="btn btn-success mt-3">Favorilere Ekle</button>
