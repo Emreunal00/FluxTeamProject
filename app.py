@@ -159,22 +159,29 @@ def update_profile():
 @app.route('/movies', methods=['GET', 'POST'])
 def movies():
     if 'user' not in session:  # Eğer oturum yoksa giriş sayfasına yönlendir
-        return redirect(url_for('home'))
+        return redirect(url_for('home'))  
     
     movie_data = None
     if request.method == 'POST':
         movie_name = request.form['movie_name']
         
-        # API isteğini yap
-        response = requests.get(f"http://www.omdbapi.com/?apikey={OMDB_API_KEY}&t={movie_name}")
+        # API isteğini yap (Benzer isimdeki filmleri almak için s parametresi kullanılıyor)
+        response = requests.get(f"http://www.omdbapi.com/?apikey={OMDB_API_KEY}&s={movie_name}")
         
         # API yanıtını kontrol et
         if response.status_code == 200:
-            movie_data = response.json()  # JSON verisini parse etmeye çalış
+            movie_data = response.json()
+            print(movie_data)  # API yanıtını kontrol et
+            if movie_data.get('Response') == 'False':
+                movie_data = None
         else:
             return "Film verisi alınamadı.", 400  # Eğer API'den veri alınamadıysa, hata döndür
         
+        if 'Search' in movie_data:
+            print(movie_data['Search'])
+        
     return render_template('movies.html', movie_data=movie_data)
+
 
 # Favorilere eklemek için rota
 @app.route('/add_to_favorites', methods=['POST'])

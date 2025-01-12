@@ -24,7 +24,8 @@
     
     <!-- Dashboard Container -->
     <div class="dashboard-container">
-        <h2>FLUX</h2>
+        <h2 style="text-align: center;">Arama Sonuçları</h2>
+        
         <!-- Arama Formu -->
         <div class="button-container">
             <form method="POST" action="/movies" class="mb-4">
@@ -40,37 +41,32 @@
             </form>
         </div>
         
-        <!-- Film Bilgileri -->
+        <!-- Benzer Filmler -->
         {% if movie_data %}
             {% if movie_data.Response == "True" %}
-                <div class="card">
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                            <img 
-                                src="{{ movie_data.Poster }}" 
-                                class="img-fluid rounded-start" 
-                                alt="Film Posteri" 
-                                onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'">
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ movie_data.Title }}</h5>
-                                <p class="card-text">
-                                    <strong>Yıl:</strong> {{ movie_data.Year }}<br>
-                                    <strong>Tür:</strong> {{ movie_data.Genre }}<br>
-                                    <strong>Yönetmen:</strong> {{ movie_data.Director }}<br>
-                                    <strong>Oyuncular:</strong> {{ movie_data.Actors }}<br>
-                                    <strong>IMDB Puanı:</strong> {{ movie_data.imdbRating }}<br>
-                                    <strong>Konu:</strong> {{ movie_data.Plot }}
-                                </p>
-                                <!-- Favorilere Ekleme Formu -->
-                                <form method="POST" action="/add_to_favorites">
-                                    <input type="hidden" name="movie_data" value="{{ movie_data | tojson }}">
-                                    <button type="submit" class="btn btn-success mt-3">Favorilere Ekle</button>
-                                </form>
+                <div class="row">
+                    {% for movie in movie_data.Search %}
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <img src="{{ movie.Poster }}" class="card-img-top" alt="Film Posteri" onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ movie.Title }}</h5>
+                                    <p class="card-text">
+                                        <strong>Yıl:</strong> {{ movie.Year }}<br>
+                                        <strong>Tür:</strong> {{ movie.Genre or 'Bilinmiyor' }}<br>
+                                        <strong>Yönetmen:</strong> {{ movie.Director or 'Bilinmiyor' }}<br>
+                                        <strong>Oyuncular:</strong> {{ movie.Actors or 'Bilinmiyor' }}<br>
+                                        <strong>IMDB Puanı:</strong> {{ movie.imdbRating or 'Bilinmiyor' }}<br>
+                                        <strong>Konu:</strong> {{ movie.Plot or 'Bilinmiyor' }}
+                                    </p>
+                                    <form method="POST" action="/add_to_favorites">
+                                        <input type="hidden" name="movie_data" value="{{ movie | tojson }}">
+                                        <button type="submit" class="btn btn-success">Favorilere Ekle</button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    {% endfor %}
                 </div>
             {% else %}
                 <p>{{ movie_data.Error }}</p>
