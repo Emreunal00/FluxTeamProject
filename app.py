@@ -1,13 +1,27 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 import yaml
 import requests
 import json  # JSON verisini işlemek için eklenmiştir
-from flask_sqlalchemy import SQLAlchemy
-from backend.models.user import db, User
+import os
+from werkzeug.utils import secure_filename
+from models import db  # Import the db instance
+from models.user import User
+from models.favorite import Favorite  # Import the Favorite model
 
 app = Flask(__name__, static_folder='frontend')
 app.secret_key = "your_secret_key"  # Session için gerekli olan secret_key
 OMDB_API_KEY = "f91c77a2"  # OMDB API anahtarı
+UPLOAD_FOLDER = 'frontend/uploads'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///your_database.db'  # Veritabanı bağlantı URI'si
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db.init_app(app)  # Initialize the SQLAlchemy instance with the app
+
+with app.app_context():
+    db.create_all()
 
 # Kullanıcıları YAML dosyasından oku
 def load_users():
@@ -59,24 +73,6 @@ def update_user_info(username, new_username=None, new_password=None):
             return True
 
     return False
-
-# Kullanıcının favori filmlerini almak için
-def load_favorites(username):
-    users = load_users()
-    user = next((user for user in users if user['username'] == username), None)
-    
-    if user and 'favorites' in user:
-        return user['favorites']
-    return []
-
-# Kullanıcının favori filmlerini kaydetmek için
-def save_favorites(username, favorites):
-    users = load_users()
-    user = next((user for user in users if user['username'] == username), None)
-    
-    if user:
-        user['favorites'] = favorites
-        save_users(users)
 
 @app.route('/')
 def home():
@@ -193,10 +189,10 @@ def movies():
 @app.route('/add_to_favorites', methods=['POST'])
 def add_to_favorites():
     if 'user' not in session:
-        return redirect(url_for('home'))
+        return jsonify(success=False, message="Oturum açmanız gerekiyor."), 401
     
     username = session['user']
-    movie_data = request.form['movie_data']  # Film bilgisini al
+    movie_data = request.json.get('movie_data')  # Film bilgisini al
 
     # JSON verisini konsola yazdırarak kontrol edin
     print(f"Received movie_data: {movie_data}")
@@ -207,15 +203,29 @@ def add_to_favorites():
     except json.JSONDecodeError as e:
         # Hata mesajını konsola yazdır
         print(f"JSONDecodeError: {str(e)}")
-        return f"Geçersiz JSON verisi: {str(e)}", 400  # Hata mesajı döndür
+        return jsonify(success=False, message=f"Geçersiz JSON verisi: {str(e)}"), 400
     
-    favorites = load_favorites(username)
-    # Favorilere eklenmiş mi kontrol et
-    if not any(fav['imdbID'] == movie_dict['imdbID'] for fav in favorites):
-        favorites.append(movie_dict)
-        save_favorites(username, favorites)
-    
-    return redirect(url_for('favorites'))  # Favoriler sayfasına yönlendir
+    # Check if the movie is already in the user's favorites
+    existing_favorite = Favorite.query.filter_by(username=username, imdb_id=movie_dict['imdbID']).first()
+    if not existing_favorite:
+        # Add the movie to the user's favorites
+        new_favorite = Favorite(
+            username=username,
+            imdb_id=movie_dict['imdbID'],
+            title=movie_dict['Title'],
+            year=movie_dict['Year'],
+            genre=movie_dict['Genre'],
+            director=movie_dict['Director'],
+            actors=movie_dict['Actors'],
+            plot=movie_dict['Plot'],
+            poster=movie_dict['Poster'],
+            imdb_rating=movie_dict['imdbRating']
+        )
+        db.session.add(new_favorite)
+        db.session.commit()
+        return jsonify(success=True, message="Film favorilere eklendi.")
+    else:
+        return jsonify(success=False, message="Film zaten favorilerinizde.")
 
 # Favori filmleri gösterme
 @app.route('/favorites')
@@ -224,14 +234,9 @@ def favorites():
         return redirect(url_for('home'))
     
     username = session['user']
-    favorite_movies = load_favorites(username)
+    favorite_movies = Favorite.query.filter_by(username=username).all()
     
     return render_template('favorites.html', favorite_movies=favorite_movies)
-
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///your_database.db'  # Veritabanı bağlantı URI'si
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-db.init_app(app)
 
 if __name__ == "__main__":
     app.run(debug=True)

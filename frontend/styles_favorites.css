@@ -1,0 +1,198 @@
+/* Genel Ayarlar */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #121212; /* Koyu arka plan */
+    color: #FFFFFF; /* Beyaz metin */
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2C3E50; /* Mavi tonlarında navbar */
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.navbar a {
+    color: #3498DB; /* Mavi tonlarında linkler */
+    text-decoration: none;
+    font-size: 16px;
+    margin-left: 15px;
+    display: inline-block;
+}
+
+.navbar a:hover {
+    text-decoration: underline;
+}
+
+.navbar .flux-btn {
+    font-size: 22px;
+    color: #FFFFFF;
+    font-weight: bold;
+    margin-left: 20px;
+}
+
+/* Profil Butonu ve Dropdown Menü Sağda */
+.navbar .profile-container {
+    position: relative;
+    display: inline-block;
+    margin-left: auto; /* Profil butonunu sağa itmek için */
+}
+
+.navbar .profile-btn {
+    background-color: #2980B9;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2C3E50; /* Mavi tonlarında navbar */
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.navbar a {
+    color: #3498DB; /* Mavi tonlarında linkler */
+    text-decoration: none;
+    font-size: 16px;
+    margin-left: 15px;
+}
+.navbar .flux-btn {
+    font-size: 22px;
+    color: #FFFFFF;
+    font-weight: bold;
+    margin-left: 20px;
+}
+.navbar .logout-btn {
+    font-size: 16px;
+    color: #FFFFFF;
+    text-decoration: none;
+    margin-left: 15px;
+}
+
+.navbar a:hover {
+    text-decoration: underline;
+}
+
+/* Profil Butonu ve Dropdown Menüsü */
+.profile-container {
+    position: relative;
+    display: inline-block;
+    margin-left: auto;
+}
+
+.profile-btn {
+    background-color: #2980B9; /* Mavi buton */
+    color: #FFFFFF;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.profile-btn:hover {
+    background-color: #3498DB; /* Mavi buton hover */
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: #34495E; /* Koyu mavi dropdown menüsü */
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.5);
+    z-index: 1;
+    border-radius: 5px;
+}
+
+.dropdown-item {
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    color: #FFFFFF;
+    font-size: 1.2em;
+}
+
+.dropdown-item:hover {
+    background-color: #5D6D7E; /* Hover için gri mavi ton */
+}
+
+.profile-container:hover .dropdown-menu {
+    display: block;
+}
+
+
+
+
+/* Arama Çubuğu */
+.search-container {
+    display: flex;
+    justify-content: center; /* Yatayda ortalar */
+    align-items: center; /* Dikeyde ortalar */
+    height: 100vh; /* Sayfa yüksekliğinin tamamı */
+    margin: 0; /* Sayfanın etrafındaki boşluğu sıfırlar */
+}
+
+.input-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.input-group input {
+    font-size: 22px;
+    padding: 15px;
+    width: 500px;
+    border: 2px solid #333333;
+    background-color: #1C1C1C;
+    color: #FFFFFF;
+    border-radius: 5px;
+}
+
+.input-group button {
+    font-size: 18px; /* Buton fontu daha büyük */
+    padding: 15px 30px;
+    background-color: #2980B9; /* Mavi buton */
+    color: #FFFFFF;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+.input-group button:hover {
+    background-color: #3498DB; /* Buton hover için mavi ton */
+}
+
+/* Butonlar */
+.btn-success {
+    background-color: #2980B9; /* Mavi buton */
+    color: #FFFFFF;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btn-success:hover {
+    background-color: #3498DB; /* Mavi buton hover */
+}
+
+
+/* Başlıklar */
+.dashboard-container h2 {
+    font-size: 50px;
+    color: #3498DB; /* Mavi başlık */
+    text-align: center;
+}
