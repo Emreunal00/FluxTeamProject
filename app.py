@@ -4,7 +4,6 @@ import requests
 import json
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-import ast
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key"  # Session için gerekli olan secret_key
@@ -90,30 +89,32 @@ def load_favorites(username):
     return movies
 
 def save_favorites(username, movie_data):
-    new_movie = Movie(
-        title=movie_data['Title'],
-        year=movie_data['Year'],
-        rated=movie_data['Rated'],
-        released=datetime.strptime(movie_data['Released'], '%d %b %Y'),
-        runtime=movie_data['Runtime'],
-        genre=movie_data['Genre'],
-        director=movie_data['Director'],
-        writer=movie_data['Writer'],
-        actors=movie_data['Actors'],
-        plot=movie_data['Plot'],
-        language=movie_data['Language'],
-        country=movie_data['Country'],
-        awards=movie_data['Awards'],
-        poster_url=movie_data['Poster'],
-        imdb_rating=float(movie_data['imdbRating']),
-        imdb_votes=movie_data['imdbVotes'],
-        imdb_id=movie_data['imdbID'],
-        box_office=movie_data['BoxOffice'],
-        username=username
-    )
-
-    db.session.add(new_movie)
-    db.session.commit()
+    try:
+        new_movie = Movie(
+            title=movie_data['Title'],
+            year=movie_data['Year'],
+            rated=movie_data['Rated'],
+            released=datetime.strptime(movie_data['Released'], '%d %b %Y'),
+            runtime=movie_data['Runtime'],
+            genre=movie_data['Genre'],
+            director=movie_data['Director'],
+            writer=movie_data['Writer'],
+            actors=movie_data['Actors'],
+            plot=movie_data['Plot'],
+            language=movie_data['Language'],
+            country=movie_data['Country'],
+            awards=movie_data['Awards'],
+            poster_url=movie_data['Poster'],
+            imdb_rating=float(movie_data['imdbRating']),
+            imdb_votes=movie_data['imdbVotes'],
+            imdb_id=movie_data['imdbID'],
+            box_office=movie_data['BoxOffice'],
+            username=username
+        )
+        db.session.add(new_movie)
+        db.session.commit()
+    except Exception as e:
+        print("Favorilere kaydederken hata:", e)
 
 @app.route('/')
 def home():
@@ -152,36 +153,6 @@ def logout():
     session.pop('user', None)
     return redirect(url_for('home'))
 
-@app.route('/profile')
-def profile():
-    if 'user' not in session:
-        return redirect(url_for('home'))
-    username = session['user']
-    users = load_users()
-    user_info = next((user for user in users if user['username'] == username), None)
-    if user_info:
-        return render_template(
-            'profile.html',
-            user_username=user_info['username'],
-            user_email=user_info['email'],
-            user_profile_image=user_info.get('profile_image', 'default_image.png')
-        )
-    return "Kullanıcı bilgileri bulunamadı!"
-
-@app.route('/update_profile', methods=['POST'])
-def update_profile():
-    if 'user' not in session:
-        return redirect(url_for('home'))
-    username = session['user']
-    current_password = request.form['current-password']
-    new_password = request.form['new-password']
-    new_username = request.form['new-username']
-    if update_user_info(username, new_username=new_username, new_password=new_password):
-        session['user'] = new_username
-        return redirect(url_for('profile'))
-    else:
-        return "Kullanıcı bilgileri güncellenemedi!"
-
 @app.route('/movies', methods=['GET', 'POST'])
 def movies():
     if 'user' not in session:
@@ -199,18 +170,13 @@ def movies():
 @app.route('/add_to_favorites', methods=['POST'])
 def add_to_favorites():
     movie_data = request.form.get('movie_data')
-
     try:
-        # Tek tırnaklı veriyi çift tırnaklı JSON formatına çevir
         if movie_data:
-            movie_data = ast.literal_eval(json.dumps(movie_data))
+            movie_data = movie_data.replace("'", '"')  # JSON formatını düzelt
             movie_dict = json.loads(movie_data)
-
-            # Favorilere ekleme işlemi
             save_favorites(session['user'], movie_dict)
     except Exception as e:
-        print("Veri hatası:", e)
-        return f"Hata: {e}", 400
+        print("Hata oluştu:", e)
 
     return redirect(url_for('favorites'))
 
