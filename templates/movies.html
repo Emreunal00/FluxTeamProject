@@ -69,7 +69,7 @@
                                     <strong>Konu:</strong> {{ movie.Plot or 'Bilinmiyor' }}
                                 </p>
                                 <!-- Favorilere Ekle -->
-                                <form method="POST" action="/add_to_favorites">
+                                <form class="favorite-form">
                                     <input type="hidden" name="movie_data" value="{{ movie | tojson }}">
                                     <button type="submit" class="btn btn-success">Favorilere Ekle</button>
                                 </form>
@@ -83,20 +83,29 @@
 
     <!-- JavaScript -->
     <script>
-        // Favorilere ekle butonuna tıklama işlemi
-        document.addEventListener('click', function(event) {
-            if (event.target.classList.contains('favorite-button')) {
-                const movieTitle = event.target.getAttribute('data-title');
-                fetch('/api/favorites', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ movie: movieTitle })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    alert(data.message);
+        document.addEventListener('DOMContentLoaded', function() {
+            const forms = document.querySelectorAll('.favorite-form');
+            forms.forEach(form => {
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    const formData = new FormData(form);
+                    const movieData = formData.get('movie_data');
+                    
+                    fetch('/add_to_favorites', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ movie_data: movieData })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert(data.message);
+                    })
+                    .catch(error => {
+                        alert('Favorilere eklenirken bir hata oluştu.');
+                        console.error('Error:', error);
+                    });
                 });
-            }
+            });
         });
     </script>
 

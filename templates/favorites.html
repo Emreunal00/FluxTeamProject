@@ -1,34 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Favoriler</title>
-    <link rel="stylesheet" href="../frontend/styles.css">
+    <title>Favori Filmler</title>
+    <link rel="stylesheet" href="../frontend/styles_favorites.css">
     <script src="../static/script.js"></script>
 </head>
 <body>
-    <h1>Favoriler</h1>
-    <div id="favorites-container">
-        <!-- Favoriler burada listelenecek -->
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <a href="/dashboard" class="flux-btn">FLUX</a> <!-- FLUX butonu -->
+        <div class="profile-container">
+            <button class="profile-btn">Profil</button>
+            <div class="dropdown-menu">
+                <a href="/profile" class="dropdown-item">Profili Düzenle</a>
+                <a href="/favorites" class="dropdown-item">Favoriler</a>
+            </div>
+        </div>
+        <a href="/logout" class="logout-btn">Çıkış Yap</a>
+    </div>
+    
+    <!-- Favori Filmler Container -->
+    <div class="favorites-container">
+        <h2 style="text-align: center;">Favori Filmler</h2>
+        
+        {% if favorite_movies %}
+            <div class="row">
+                {% for movie in favorite_movies %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <img 
+                                src="{{ movie.poster or 'https://via.placeholder.com/300x450?text=No+Image' }}" 
+                                class="card-img-top" 
+                                alt="Film Posteri">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ movie.title }}</h5>
+                                <p class="card-text">
+                                    <strong>Yıl:</strong> {{ movie.year or 'Bilinmiyor' }}<br>
+                                    <strong>Tür:</strong> {{ movie.genre or 'Bilinmiyor' }}<br>
+                                    <strong>Yönetmen:</strong> {{ movie.director or 'Bilinmiyor' }}<br>
+                                    <strong>Oyuncular:</strong> {{ movie.actors or 'Bilinmiyor' }}<br>
+                                    <strong>IMDb Puanı:</strong> {{ movie.imdb_rating or 'Bilinmiyor' }}<br>
+                                    <strong>Konu:</strong> {{ movie.plot or 'Bilinmiyor' }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p style="text-align: center;">Henüz favori filminiz yok.</p>
+        {% endif %}
     </div>
 
-    <script>
-        // Favorileri yükleme
-        document.addEventListener('DOMContentLoaded', function() {
-            fetch('/api/favorites')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        const container = document.getElementById('favorites-container');
-                        data.favorites.forEach(movie => {
-                            const movieDiv = document.createElement('div');
-                            movieDiv.textContent = movie;
-                            container.appendChild(movieDiv);
-                        });
-                    }
-                });
-        });
-    </script>
 </body>
 </html>
