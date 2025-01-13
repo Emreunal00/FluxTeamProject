@@ -16,3 +16,15 @@ router.get('/:movieTitle', async (req, res) => {
 });
 
 module.exports = router;
+
+
+fetch('/add_to_favorites', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ movie_data: movieTitle })
+})
+.then(response => response.json())
+.then(data => {
+    alert(data.message);
+})
+.catch(error => console.error('Hata:', error));

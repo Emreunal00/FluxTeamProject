@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FLUX Dashboard</title>
     <!-- CSS Bağlantısı -->
-    <link rel="stylesheet" href="../frontend/styles_movie.css"> <!-- styles.css'in doğru dizin yolunu belirtin -->
+    <link rel="stylesheet" href="../frontend/styles_movie.css"> <!-- styles_movie.css'in doğru yolunu kontrol edin -->
 </head>
 <body>
 
@@ -41,6 +41,7 @@
             </form>
         </div>
 
+        <!-- Hata Mesajı -->
         {% if error_message %}
             <div class="alert alert-danger text-center" role="alert">
                 {{ error_message }}
@@ -49,36 +50,55 @@
         
         <!-- Benzer Filmler -->
         {% if movie_data %}
-            {% if movie_data.Response == "True" %}
-                <div class="row">
-                    {% for movie in movie_data.Search %}
-                        <div class="col-md-4 mb-4">
-                            <div class="card">
-                                <img src="{{ movie.Poster }}" class="card-img-top" alt="Film Posteri" onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ movie.Title }}</h5>
-                                    <p class="card-text">
-                                        <strong>Yıl:</strong> {{ movie.Year }}<br>
-                                        <strong>Tür:</strong> {{ movie.Genre or 'Bilinmiyor' }}<br>
-                                        <strong>Yönetmen:</strong> {{ movie.Director or 'Bilinmiyor' }}<br>
-                                        <strong>Oyuncular:</strong> {{ movie.Actors or 'Bilinmiyor' }}<br>
-                                        <strong>IMDB Puanı:</strong> {{ movie.imdbRating or 'Bilinmiyor' }}<br>
-                                        <strong>Konu:</strong> {{ movie.Plot or 'Bilinmiyor' }}
-                                    </p>
-                                    <form method="POST" action="/add_to_favorites">
-                                        <input type="hidden" name="movie_data" value="{{ movie | tojson }}">
-                                        <button type="submit" class="btn btn-success">Favorilere Ekle</button>
-                                    </form>
-                                </div>
+            <div class="row">
+                {% for movie in movie_data %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <img 
+                                src="{{ movie.Poster or 'https://via.placeholder.com/300x450?text=No+Image' }}" 
+                                class="card-img-top" 
+                                alt="Film Posteri">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ movie.Title }}</h5>
+                                <p class="card-text">
+                                    <strong>Yıl:</strong> {{ movie.Year or 'Bilinmiyor' }}<br>
+                                    <strong>Tür:</strong> {{ movie.Genre or 'Bilinmiyor' }}<br>
+                                    <strong>Yönetmen:</strong> {{ movie.Director or 'Bilinmiyor' }}<br>
+                                    <strong>Oyuncular:</strong> {{ movie.Actors or 'Bilinmiyor' }}<br>
+                                    <strong>IMDb Puanı:</strong> {{ movie.imdbRating or 'Bilinmiyor' }}<br>
+                                    <strong>Konu:</strong> {{ movie.Plot or 'Bilinmiyor' }}
+                                </p>
+                                <!-- Favorilere Ekle -->
+                                <form method="POST" action="/add_to_favorites">
+                                    <input type="hidden" name="movie_data" value="{{ movie | tojson }}">
+                                    <button type="submit" class="btn btn-success">Favorilere Ekle</button>
+                                </form>
                             </div>
                         </div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <p>{{ movie_data.Error }}</p>
-            {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
         {% endif %}
     </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Favorilere ekle butonuna tıklama işlemi
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('favorite-button')) {
+                const movieTitle = event.target.getAttribute('data-title');
+                fetch('/api/favorites', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ movie: movieTitle })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                });
+            }
+        });
+    </script>
 
 </body>
 </html>

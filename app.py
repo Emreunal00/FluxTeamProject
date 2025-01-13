@@ -161,28 +161,35 @@ def movies():
     if 'user' not in session:  # Eğer oturum yoksa giriş sayfasına yönlendir
         return redirect(url_for('home'))
     
-    movie_data = None
-    error_message = None  # Hata mesajını saklayacağımız değişken
+    movie_data = []  # Film detaylarını saklamak için bir liste
+    error_message = None  # Hata mesajını saklamak için değişken
 
     if request.method == 'POST':
         movie_name = request.form['movie_name']
         
-        # API isteğini yap (Benzer isimdeki filmleri almak için s parametresi kullanılıyor)
-        response = requests.get(f"http://www.omdbapi.com/?apikey={OMDB_API_KEY}&s={movie_name}")
+        # İlk olarak `s` parametresi ile genel bir arama yapılıyor
+        search_response = requests.get(f"http://www.omdbapi.com/?apikey={OMDB_API_KEY}&s={movie_name}")
         
-        # API yanıtını kontrol et
-        if response.status_code == 200:
-            movie_data = response.json()  # JSON verisini parse etmeye çalış
-            if movie_data.get('Response') == 'False':  # Eğer hiçbir film bulunmazsa
+        if search_response.status_code == 200:
+            search_results = search_response.json()  # JSON verisini parse et
+            
+            if search_results.get('Response') == 'True':  # Eğer arama başarılıysa
+                for movie in search_results.get('Search', []):  # Her film için
+                    imdb_id = movie.get('imdbID')  # IMDb ID'sini al
+                    if imdb_id:  # Eğer IMDb ID mevcutsa
+                        # `t` parametresi yerine `i` (IMDb ID) kullanılarak detay bilgileri alınır
+                        detail_response = requests.get(f"http://www.omdbapi.com/?apikey={OMDB_API_KEY}&i={imdb_id}")
+                        
+                        if detail_response.status_code == 200:
+                            movie_details = detail_response.json()  # JSON verisini al
+                            movie_data.append(movie_details)  # Film detaylarını listeye ekle
+            else:
                 error_message = "Aradığınız filme dair sonuç bulunamadı."
-                movie_data = None  # film verisi yoksa boş bırak
         else:
             error_message = "Film verisi alınamadı. Lütfen tekrar deneyin."
         
     return render_template('movies.html', movie_data=movie_data, error_message=error_message)
 
-
-# Favorilere eklemek için rota
 @app.route('/add_to_favorites', methods=['POST'])
 def add_to_favorites():
     if 'user' not in session:
@@ -190,19 +197,23 @@ def add_to_favorites():
     
     username = session['user']
     movie_data = request.form['movie_data']  # Film bilgisini al
-    
-    # Tek tırnakları çift tırnağa çevir (bu gerekli olabilir çünkü bazen JSON verisi tek tırnak kullanabiliyor)
-    movie_data = movie_data.replace("'", '"')
+
+    # JSON verisini konsola yazdırarak kontrol edin
+    print(f"Received movie_data: {movie_data}")
     
     try:
         # JSON verisini Python dict'e dönüştür
-        movie_dict = json.loads(movie_data)  # JSON verisini Python objesine dönüştür
-    except json.JSONDecodeError:
-        return "Geçersiz JSON verisi", 400  # Eğer JSON geçersizse hata mesajı döndür
+        movie_dict = json.loads(movie_data)
+    except json.JSONDecodeError as e:
+        # Hata mesajını konsola yazdır
+        print(f"JSONDecodeError: {str(e)}")
+        return f"Geçersiz JSON verisi: {str(e)}", 400  # Hata mesajı döndür
     
     favorites = load_favorites(username)
-    favorites.append(movie_dict)
-    save_favorites(username, favorites)
+    # Favorilere eklenmiş mi kontrol et
+    if not any(fav['imdbID'] == movie_dict['imdbID'] for fav in favorites):
+        favorites.append(movie_dict)
+        save_favorites(username, favorites)
     
     return redirect(url_for('favorites'))  # Favoriler sayfasına yönlendir
 
