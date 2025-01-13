@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FLUX Dashboard</title>
+    <title>FLUX</title>
     <!-- CSS Bağlantısı -->
     <link rel="stylesheet" href="../frontend/styles_dashboard.css"> <!-- styles.css'in doğru dizin yolunu belirtin -->
 </head>
@@ -24,7 +24,7 @@
     
     <!-- Dashboard Container -->
     <div class="dashboard-container">
-        <h2>FLUX</h2>
+        <h2 style="text-align: center;">Flux Movie Database</h2>
         <!-- Arama Formu -->
         <div class="button-container">
             <form method="POST" action="/movies" class="mb-4">
@@ -39,43 +39,21 @@
                 </div>
             </form>
         </div>
-        
-        <!-- Film Bilgileri -->
-        {% if movie_data %}
-            {% if movie_data.Response == "True" %}
-                <div class="card">
-                    <div class="row g-0">
-                        <div class="col-md-4">
-                            <img 
-                                src="{{ movie_data.Poster }}" 
-                                class="img-fluid rounded-start" 
-                                alt="Film Posteri" 
-                                onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'">
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ movie_data.Title }}</h5>
-                                <p class="card-text">
-                                    <strong>Yıl:</strong> {{ movie_data.Year }}<br>
-                                    <strong>Tür:</strong> {{ movie_data.Genre }}<br>
-                                    <strong>Yönetmen:</strong> {{ movie_data.Director }}<br>
-                                    <strong>Oyuncular:</strong> {{ movie_data.Actors }}<br>
-                                    <strong>IMDB Puanı:</strong> {{ movie_data.imdbRating }}<br>
-                                    <strong>Konu:</strong> {{ movie_data.Plot }}
-                                </p>
-                                <!-- Favorilere Ekleme Formu -->
-                                <form method="POST" action="/add_to_favorites">
-                                    <input type="hidden" name="movie_data" value="{{ movie_data | tojson }}">
-                                    <button type="submit" class="btn btn-success mt-3">Favorilere Ekle</button>
-                                </form>
-                            </div>
-                        </div>
+
+        <!-- Film Önerileri -->
+        <div class="recommendations-container">
+            <h3>Film Önerileri</h3>
+            <!-- Film Kartları Konteyneri -->
+            <div class="movie-container">
+                {% for movie in recommended_movies %}
+                    <div class="movie-card">
+                        <img src="{{ movie.poster }}" alt="Film Posteri">
+                        <h3>{{ movie.title }}</h3>
+                        <p>{{ movie.year }}</p>
                     </div>
-                </div>
-            {% else %}
-                <p>{{ movie_data.Error }}</p>
-            {% endif %}
-        {% endif %}
+                {% endfor %}
+            </div>
+        </div>
     </div>
 
 </body>
