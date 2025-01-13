@@ -2,23 +2,37 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kayıt Ol</title>
     <link rel="stylesheet" href="../frontend/styles_register.css"> <!-- CSS dosyasını burada ekliyoruz -->
 </head>
 <body>
 
-    <div class="register-container">
-        <h2>Kayıt Ol</h2>
-        <form action="/register" method="POST">
-            <input type="text" name="username" placeholder="Kullanıcı Adı" required>
-            <input type="email" name="email" placeholder="E-posta" required>
-            <input type="password" name="password" placeholder="Şifre" required>
-            <input type="password" name="confirm-password" placeholder="Şifreyi Onayla" required>
-            <button type="submit">Kayıt Ol</button>
-        </form>
-        <p>Zaten hesabınız var mı? <a href="/">Giriş Yap</a></p>
-    </div>
+<!-- Ring animasyonlu kısımlar -->
+<div class="ring">
+  <i style="--clr:#00ff0a;"></i>
+  <i style="--clr:#ff0057;"></i>
+  <i style="--clr:#fffd44;"></i>
+  
+  <div class="login">
+    <h2>Kayıt Ol</h2>
+    <form action="/register" method="POST">
+      <div class="inputBx">
+        <input type="text" name="username" required placeholder="Kullanıcı Adı">
+      </div>
+      <div class="inputBx">
+        <input type="email" name="email" required placeholder="E-posta">
+      </div>
+      <div class="inputBx">
+        <input type="password" name="password" required placeholder="Şifre">
+      </div>
+      <div class="inputBx">
+        <input type="submit" value="Kayıt Ol">
+      </div>
+    </form>
+  </div>
+</div>
 
 </body>
 </html>

@@ -2,21 +2,37 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Sayfası</title>
-    <link rel="stylesheet" href="../frontend/styles_login.css"> <!-- CSS dosyasını ekliyoruz -->
+    <title>Animasyonlu Giriş Yap</title>
+    <link rel="stylesheet" href="../frontend/styles_login.css"> <!-- CSS dosyasını burada ekliyoruz -->
 </head>
 <body>
 
-    <div class="login-container">
-        <h2>Giriş Yap</h2>
-        <form action="/login" method="POST">
-            <input type="text" name="username" placeholder="Kullanıcı Adı" required>
-            <input type="password" name="password" placeholder="Şifre" required>
-            <button type="submit">Giriş Yap</button>
-        </form>        
-        <p>Hesabınız yok mu? <a href="/register">Kayıt Ol</a></p>
-    </div>
+<!-- Ring animasyonlu kısımlar -->
+<div class="ring">
+  <i style="--clr:#00ff0a;"></i>
+  <i style="--clr:#ff0057;"></i>
+  <i style="--clr:#fffd44;"></i>
+  
+  <div class="login">
+    <h2>Giriş Yap</h2>
+    <form action="/login" method="POST">
+      <div class="inputBx">
+        <input type="text" name="username" required placeholder="Kullanıcı Adı">
+      </div>
+      <div class="inputBx">
+        <input type="password" name="password" required placeholder="Şifre">
+      </div>
+      <div class="inputBx">
+        <input type="submit" value="Giriş Yap">
+      </div>
+    </form>
+    
+    <!-- Hesabınız yok mu? Kayıt Ol kısmı -->
+    <p>Hesabınız yok mu? <a href="/register">Kayıt Ol</a></p>
+  </div>
+</div>
 
 </body>
 </html>
