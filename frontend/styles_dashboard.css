@@ -270,6 +270,90 @@ body {
     text-align: center;
 }
 
+.dashboard-container h3 {
+    font-size: 20px;
+    color: #3498DB; /* Mavi başlık */
+    text-align: center;
+    margin: 0 auto; /* Ortalamak için */
+    display: block; /* Bloc öğe olarak ayarla */
+    padding-top: 20px; /* Üstten biraz boşluk ekleyebiliriz */
+}
+
+
+/* Film Kartları Konteyneri */
+.movie-container {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr); /* 15 sütun */
+    grid-template-rows: repeat(2, auto); /* 2 satır */
+    grid-gap: 20px; /* Kartlar arasındaki boşluk */
+    padding: 20px;
+    max-width: 100%; /* Konteyner genişliği */
+    margin: 0 auto; /* Ortalamak için */
+}
+
+/* Film Kartları */
+.movie-card {
+    background-color: #1C1C1C; /* Kart arka planı */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
+}
+
+/* Film Kartı Hover Efekti - Neon Çerçeve */
+.movie-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    border: 3px solid #FF00C8; /* Neon çerçeve rengi */
+    animation: neon-border 1.5s infinite alternate; /* Neon efekti animasyonu */
+}
+
+/* Neon Çerçeve Animasyonu */
+@keyframes neon-border {
+    0% {
+        border-color: #FF00C8;
+        box-shadow: 0 0 10px #FF00C8, 0 0 20px #FF00C8, 0 0 30px #FF00C8;
+    }
+    50% {
+        border-color: #00FFD5;
+        box-shadow: 0 0 10px #00FFD5, 0 0 20px #00FFD5, 0 0 30px #00FFD5;
+    }
+    100% {
+        border-color: #48FF00;
+        box-shadow: 0 0 10px #48FF00, 0 0 20px #48FF00, 0 0 30px #48FF00;
+    }
+}
+
+/* Film Poster */
+.movie-card img {
+    width: 100%; /* Poster genişliği */
+    height: auto; /* Poster yüksekliği */
+    border-bottom: 2px solid #3498DB; /* Poster altında mavi çizgi */
+}
+
+/* Film Başlığı */
+.movie-card h3 {
+    font-size: 18px;
+    margin: 10px 0;
+    color: #FFFFFF;
+    padding: 0 10px;
+}
+
+/* Alt Bilgi */
+.movie-card p {
+    font-size: 14px;
+    color: #BDC3C7; /* Açık gri metin */
+    margin: 10px 0;
+}
+
+/* Media Query (Responsive Tasarım) */
+@media (max-width: 768px) {
+    .movie-container {
+        grid-template-columns: 1fr; /* Küçük ekranlarda tek sütun */
+    }
+}
+
 @keyframes glowing {
   0% {background-position: 0 0;}
   50% {background-position: 400% 0;}

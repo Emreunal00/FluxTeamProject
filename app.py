@@ -3,6 +3,7 @@ import yaml
 import requests
 import json  # JSON verisini işlemek için eklenmiştir
 import os
+import random
 from werkzeug.utils import secure_filename
 from models import db  # Import the db instance
 from models.user import User
@@ -74,9 +75,42 @@ def update_user_info(username, new_username=None, new_password=None):
 
     return False
 
+def get_random_movies():
+    """`movies.txt` dosyasından rastgele filmleri seçer ve OMDB API'den detaylarını alır."""
+    try:
+        # movies.txt dosyasını aç ve film isimlerini listele
+        with open("movies.txt", "r") as file:
+            movie_titles = [line.strip() for line in file if line.strip()]  # Boş satırları çıkarır
+    except FileNotFoundError:
+        print("movies.txt dosyası bulunamadı! Lütfen dosyayı oluşturun ve film isimlerini ekleyin.")
+        return []  # Eğer dosya yoksa, boş liste döndür
+
+    # Film isimlerinden rastgele 10 tanesini seç
+    random_movies = random.sample(movie_titles, min(len(movie_titles), 30))  # 10 veya daha az seçer
+    recommended_movies = []
+
+    for title in random_movies:
+        response = requests.get(f"http://www.omdbapi.com/?apikey={OMDB_API_KEY}&t={title}")
+        if response.status_code == 200:
+            movie = response.json()
+
+            # Eğer başlık veya poster bilgisi eksikse, filmi atla
+            if not movie.get("Title") or not movie.get("Poster"):
+                continue
+
+            # Film verilerini ekle
+            recommended_movies.append({
+                "title": movie["Title"],
+                "poster": movie["Poster"]
+            })
+
+    return recommended_movies
+
+
 @app.route('/')
 def home():
-    return render_template("login.html")
+    recommended_movies = get_random_movies()
+    return render_template("dashboard.html", recommended_movies=recommended_movies)
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -107,7 +141,8 @@ def register():
 def dashboard():
     if 'user' not in session:  # Eğer oturum yoksa giriş sayfasına yönlendir
         return redirect(url_for('home'))
-    return render_template("dashboard.html")
+    recommended_movies = get_random_movies()
+    return render_template("dashboard.html", recommended_movies=recommended_movies)
 
 @app.route('/logout')
 def logout():
