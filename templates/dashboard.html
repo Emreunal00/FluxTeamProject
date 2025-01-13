@@ -193,7 +193,7 @@
                                 </p>
                                 <!-- Favorilere ekle -->
                                 <form method="POST" action="/add_to_favorites">
-                                    <input type="hidden" name="movie_data" value="{{ movie_data | tojson }}">
+                                    <input type="hidden" name="movie_data" value="{{ movie_data | tojson | safe }}">
                                     <button type="submit" class="btn btn-success mt-3">Favorilere Ekle</button>
                                 </form>
                             </div>

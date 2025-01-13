@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,19 +10,13 @@
     <div class="container mt-5">
         <h1 class="text-center">Favori Filmlerim</h1>
 
-        <!-- Dashboard'a dönüş butonu -->
         <a href="/dashboard" class="btn btn-secondary mb-4">Dashboard</a>
 
-        <!-- Favori filmleri listeleme -->
         <div class="row">
             {% for movie in favorite_movies %}
                 <div class="col-md-4">
                     <div class="card">
-                        <img 
-                            src="{{ movie.Poster }}" 
-                            class="img-fluid" 
-                            alt="Film Posteri"
-                            onerror="this.src='https://via.placeholder.com/250x375?text=No+Image'">
+                        <img src="{{ movie.Poster }}" class="img-fluid" alt="Film Posteri" onerror="this.src='https://via.placeholder.com/250x375?text=No+Image'">
                         <div class="card-body">
                             <h5 class="card-title">{{ movie.Title }}</h5>
                             <p class="card-text">

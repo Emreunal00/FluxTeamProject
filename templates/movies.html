@@ -19,7 +19,7 @@
             color: white;
         }
         .navbar .flux-btn {
-            background-color: #4CAF50;  /* Buton yeşil rengi */
+            background-color: #4CAF50;
             color: white;
             padding: 10px 20px;
             font-size: 18px;
@@ -28,7 +28,7 @@
             cursor: pointer;
         }
         .navbar .flux-btn:hover {
-            background-color: #45a049;  /* Buton üzerine gelindiğinde renk değişimi */
+            background-color: #45a049;
         }
         .navbar a {
             color: white;
@@ -45,27 +45,21 @@
             margin-top: 50px;
         }
         .input-group input {
-            font-size: 18px; /* Arama çubuğunu büyüttük */
+            font-size: 18px;
             padding: 10px;
             width: 300px;
             margin-right: 10px;
         }
-
         .input-group button {
-            font-size: 18px; /* Arama butonunu büyüttük */
+            font-size: 18px;
             padding: 10px;
         }
-
-        /* Başlık */
         .dashboard-container h2 {
-            font-size: 50px; /* Hoşgeldiniz yazısını büyüttük */
+            font-size: 50px;
             color: white;
             margin-bottom: 20px;
-            text-align: center;  /* Başlığı ortaladık */
+            text-align: center;
         }
-
-        /* Film Sonuçları */
-        
         .card {
             background-color: rgb(57, 40, 86);
             color: white;
@@ -104,63 +98,12 @@
         .btn-success:hover {
             background-color: #45a049;
         }
-
-        /* Profil Butonu ve Dropdown Menüsü */
-        .profile-container {
-            position: relative;
-            display: inline-block;
-            margin-left: auto;
-        }
-
-        .profile-btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            border-radius: 5px;
-        }
-
-        .profile-btn:hover {
-            background-color: #45a049;
-        }
-
-        /* Dropdown Menü Başlangıçta Gizli */
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            background-color: #333;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-            z-index: 1;
-            border-radius: 5px;
-        }
-
-        /* Menü Elemanları */
-        .dropdown-item {
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            color: white;
-            font-size: 1.2em;
-        }
-
-        .dropdown-item:hover {
-            background-color: #555;
-        }
-
-        /* Profil Butonunun Üzerine Gelindiğinde Menü Görünür */
-        .profile-container:hover .dropdown-menu {
-            display: block;
-        }
     </style>
 </head>
 <body>
 
     <div class="navbar">
-        <!-- FLUX Butonu -->
-        <a href="/dashboard" class="flux-btn">FLUX</a>  <!-- FLUX butonuna yönlendirme ekledik -->
+        <a href="/dashboard" class="flux-btn">FLUX</a>
         <div class="profile-container">
             <button class="profile-btn">Profil</button>
             <div class="dropdown-menu">
@@ -168,19 +111,13 @@
                 <a href="/favorites" class="dropdown-item">Favoriler</a>
             </div>
         </div>
-        <a href="/logout">Çıkış Yap</a>  <!-- Çıkış yap linki -->
+        <a href="/logout">Çıkış Yap</a>
     </div>
     
-    <!-- Arama Çubuğu -->
     <div class="search-container">
         <form method="POST" action="/movies" class="mb-4">
             <div class="input-group">
-                <input 
-                    type="text" 
-                    name="movie_name" 
-                    class="form-control" 
-                    placeholder="Film adını giriniz..." 
-                    required>
+                <input type="text" name="movie_name" class="form-control" placeholder="Film adını giriniz..." required>
                 <button type="submit" class="btn btn-primary">Ara</button>
             </div>
         </form>
@@ -188,18 +125,13 @@
 
     <div class="dashboard-container">
         <h2>Arama Sonuçları</h2>
-        
-        <!-- Film Sonucu Gösterimi -->
+
         {% if movie_data %}
             {% if movie_data.Response == "True" %}
                 <div class="card">
                     <div class="row g-0">
                         <div class="col-md-4">
-                            <img 
-                                src="{{ movie_data.Poster }}" 
-                                class="img-fluid rounded-start" 
-                                alt="Film Posteri" 
-                                onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'">
+                            <img src="{{ movie_data.Poster }}" class="img-fluid rounded-start" alt="Film Posteri" onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'">
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
@@ -212,9 +144,8 @@
                                     <strong>IMDB Puanı:</strong> {{ movie_data.imdbRating }}<br>
                                     <strong>Konu:</strong> {{ movie_data.Plot }}
                                 </p>
-                                <!-- Favorilere ekle -->
                                 <form method="POST" action="/add_to_favorites">
-                                    <input type="hidden" name="movie_data" value="{{ movie_data | tojson }}">
+                                    <input type="hidden" name="movie_data" value="{{ movie_data | tojson | safe }}">
                                     <button type="submit" class="btn-success mt-3">Favorilere Ekle</button>
                                 </form>
                             </div>
