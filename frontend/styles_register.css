@@ -1,69 +1,158 @@
-/* Genel Ayarlar */
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Quicksand", sans-serif;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    background-color: #121212; /* Koyu arka plan */
-    color: #FFFFFF; /* Beyaz metin */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh; /* Sayfa yüksekliği */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #121212; /* Dark background for the project */
+  width: 100%;
+  overflow: hidden;
 }
 
-/* Kayıt Ol Sayfası */
-.register-container {
-    background-color: #1C1C1C; /* Koyu gri zemin */
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 300px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center; /* Yatayda ve dikeyde ortalama */
+.ring {
+  position: relative;
+  width: 500px;
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.register-container h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #3498DB; /* Mavi başlık */
+.ring i {
+  position: absolute;
+  inset: 0;
+  border: 2px solid #fff;
+  transition: 0.5s;
 }
 
-.register-container input {
-    width: 92%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #333333; /* Koyu sınır */
-    border-radius: 5px;
-    background-color: #1C1C1C;
-    color: #FFFFFF;
+.ring i:nth-child(1) {
+  border-radius: 38% 62% 63% 37% / 41% 44% 56% 59%;
+  animation: animate 6s linear infinite;
+  border-color: #8e44ad; /* Purple ring */
 }
 
-.register-container button {
-    width: 100%;
-    padding: 10px;
-    background-color: #2980B9; /* Mavi buton */
-    border: none;
-    border-radius: 5px;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
+.ring i:nth-child(2) {
+  border-radius: 41% 44% 56% 59% / 38% 62% 63% 37%;
+  animation: animate 4s linear infinite;
+  border-color: #27ae60; /* Green ring */
 }
 
-.register-container button:hover {
-    background-color: #3498DB; /* Mavi buton hover */
+.ring i:nth-child(3) {
+  border-radius: 41% 44% 56% 59% / 38% 62% 63% 37%;
+  animation: animate2 10s linear infinite;
+  border-color: #3498DB; /* Blue ring */
 }
 
-.register-container p {
-    text-align: center;
-    margin-top: 10px;
+/* Add glowing neon effect on hover for rings */
+.ring:hover i:nth-child(1) {
+  filter: drop-shadow(0 0 25px #8e44ad) drop-shadow(0 0 50px #8e44ad); /* Stronger purple neon glow */
 }
 
-.register-container p a {
-    color: #3498DB;
-    text-decoration: none;
+.ring:hover i:nth-child(2) {
+  filter: drop-shadow(0 0 25px #27ae60) drop-shadow(0 0 50px #27ae60); /* Stronger green neon glow */
 }
 
-.register-container p a:hover {
-    text-decoration: underline;
+.ring:hover i:nth-child(3) {
+  filter: drop-shadow(0 0 25px #3498DB) drop-shadow(0 0 50px #3498DB); /* Stronger blue neon glow */
+}
+
+/* Add neon glow effect on focused input fields */
+.login .inputBx input:focus {
+  border: 2px solid #3498DB; /* Blue border for focused input */
+  box-shadow: 0 0 15px #3498DB, 0 0 25px #3498DB, 0 0 35px #3498DB; /* Intense blue neon glow */
+}
+
+@keyframes animate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes animate2 {
+  0% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.login {
+  position: absolute;
+  width: 300px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.login h2 {
+  font-size: 2em;
+  color: #FFFFFF; /* White color for the text */
+}
+
+.login .inputBx {
+  position: relative;
+  width: 100%;
+}
+
+.login .inputBx input {
+  position: relative;
+  width: 100%;
+  padding: 12px 20px;
+  background: transparent;
+  border: 2px solid #333; /* Darker border color */
+  border-radius: 40px;
+  font-size: 1.2em;
+  color: #FFFFFF; /* White text in inputs */
+  box-shadow: none;
+  outline: none;
+}
+
+.login .inputBx input[type="submit"] {
+  width: 100%;
+  background: linear-gradient(45deg, #2980B9, #3498DB); /* Gradient from your color palette */
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.login .inputBx input[type="submit"]:hover {
+  background: linear-gradient(45deg, #3498DB, #2980B9);
+  filter: drop-shadow(0 0 25px #3498DB) drop-shadow(0 0 50px #3498DB); /* Glowing neon effect */
+}
+
+.login .inputBx input::placeholder {
+  color: rgba(255, 255, 255, 0.75); /* Lighter placeholder text */
+}
+
+.login .links {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+.login .links a {
+  color: #3498DB; /* Blue for links */
+  text-decoration: none;
+}
+
+.login .links a:hover {
+  text-decoration: underline;
 }
