@@ -86,12 +86,87 @@ body {
     border-radius: 5px;
     color: white;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px;
     display: block;
-    margin: 0 auto;
 }
 
 .update-btn:hover {
+    background-color: #3498DB;
+}
+
+.profile-container h3 {
+    text-align: center;
+    color: #3498DB;
+}
+/* Şifre Değiştirme Formu */
+.password-change-container {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: #1C1C1C;
+}
+
+.password-change-container label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.password-change-container input[type="password"] {
+    width: 97%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.password-change-container button {
+    padding: 10px 20px;
+    background-color: #2980B9;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.password-change-container button:hover {
+    background-color: #3498DB;
+}
+
+/* Kullanıcı Adı Değiştirme Formu */
+.username-change-container {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: #1C1C1C;
+}
+
+.username-change-container label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.username-change-container input[type="text"] {
+    width: 97%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.username-change-container button {
+    padding: 10px 20px;
+    background-color: #2980B9;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.username-change-container button:hover {
     background-color: #3498DB;
 }
 

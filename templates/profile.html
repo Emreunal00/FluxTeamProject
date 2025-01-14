@@ -35,6 +35,26 @@
                 <button type="submit" class="btn-success" id="upload-button">Yükle</button>
             </form>
         </div>
+        
+        <div class="username-change-container">
+            <form action="/change_username" method="POST">
+                <label for="new-username">Yeni Kullanıcı Adı:</label>
+                <input type="text" id="new-username" name="new-username" required>
+                <button type="submit" class="btn-success">Kullanıcı Adını Güncelle</button>
+            </form>
+        </div>
+
+        <div class="password-change-container">
+            <form action="/change_password" method="POST">
+                <label for="current-password">Mevcut Şifre:</label>
+                <input type="password" id="current-password" name="current-password" required>
+                <label for="new-password">Yeni Şifre:</label>
+                <input type="password" id="new-password" name="new-password" required>
+                <button type="submit" class="btn-success">Şifreyi Güncelle</button>
+            </form>
+        </div>
+
+        
     </div>
 
     <!-- JavaScript kodları burada -->
