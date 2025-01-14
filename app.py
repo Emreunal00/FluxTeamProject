@@ -145,8 +145,7 @@ def allowed_file(filename):
 
 @app.route('/')
 def home():
-    recommended_movies = get_random_movies()
-    return render_template("dashboard.html", recommended_movies=recommended_movies)
+    return redirect(url_for('login'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
