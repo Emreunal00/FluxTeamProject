@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLUX Dashboard</title>
+    <!-- CSS Bağlantısı -->
+    <link rel="stylesheet" href="../frontend/styles_movie.css"> <!-- styles_movie.css'in doğru yolunu kontrol edin -->
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <a href="/dashboard" class="flux-btn">FLUX</a> <!-- FLUX butonu -->
+        <div class="profile-container">
+            <button class="profile-btn">Profil</button>
+            <div class="dropdown-menu">
+                <a href="/profile" class="dropdown-item">Profili Düzenle</a>
+                <a href="/favorites" class="dropdown-item">Favoriler</a>
+            </div>
+        </div>
+        <a href="/logout" class="logout-btn">Çıkış Yap</a>
+    </div>
+    
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <h2 style="text-align: center;">Arama Sonuçları</h2>
+        
+        <!-- Arama Formu -->
+        <div class="button-container">
+            <form method="POST" action="/movies" class="mb-4">
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        name="movie_name" 
+                        class="form-control" 
+                        placeholder="Film adını giriniz..." 
+                        required>
+                    <button type="submit" class="btn btn-primary">Ara</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Hata Mesajı -->
+        {% if error_message %}
+            <div class="alert alert-danger text-center" role="alert">
+                {{ error_message }}
+            </div>
+        {% endif %}
+        
+        <!-- Benzer Filmler -->
+        {% if movie_data %}
+            <div class="row movie-container">
+                {% for movie in movie_data %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <img 
+                                src="{{ movie.Poster or 'https://via.placeholder.com/300x450?text=No+Image' }}" 
+                                class="card-img-top" 
+                                alt="Film Posteri">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ movie.Title }}</h5>
+                                <p class="card-text">
+                                    <strong>Yıl:</strong> {{ movie.Year or 'Bilinmiyor' }}<br>
+                                    <strong>Tür:</strong> {{ movie.Genre or 'Bilinmiyor' }}<br>
+                                    <strong>Yönetmen:</strong> {{ movie.Director or 'Bilinmiyor' }}<br>
+                                    <strong>Oyuncular:</strong> {{ movie.Actors or 'Bilinmiyor' }}<br>
+                                    <strong>IMDb Puanı:</strong> {{ movie.imdbRating or 'Bilinmiyor' }}<br>
+                                    <strong>Konu:</strong> {{ movie.Plot or 'Bilinmiyor' }}
+                                </p>
+                                <!-- Favorilere Ekle -->
+                                <button class="btn btn-success add-to-favorites" data-movie='{{ movie | tojson }}'>Favorilere Ekle</button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.add-to-favorites');
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const movieData = button.getAttribute('data-movie');
+                    
+                    fetch('/add_to_favorites', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ movie_data: movieData })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert(data.message);
+                        if (data.success) {
+                            window.location.href = '/favorites'; // Redirect to favorites page
+                        }
+                    })
+                    .catch(error => {
+                        alert('Favorilere eklenirken bir hata oluştu.');
+                        console.error('Error:', error);
+                    });
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayıt Ol</title>
+    <link rel="stylesheet" href="../frontend/styles_register.css"> <!-- CSS dosyasını burada ekliyoruz -->
+</head>
+<body>
+
+<!-- Ring animasyonlu kısımlar -->
+<div class="ring">
+  <i style="--clr:#00ff0a;"></i>
+  <i style="--clr:#ff0057;"></i>
+  <i style="--clr:#fffd44;"></i>
+  
+  <div class="login">
+    <h2>Kayıt Ol</h2>
+    <form action="/register" method="POST">
+      <div class="inputBx">
+        <input type="text" name="username" required placeholder="Kullanıcı Adı">
+      </div>
+      <div class="inputBx">
+        <input type="email" name="email" required placeholder="E-posta">
+      </div>
+      <div class="inputBx">
+        <input type="password" name="password" required placeholder="Şifre">
+      </div>
+      <div class="inputBx">
+        <input type="submit" value="Kayıt Ol">
+      </div>
+    </form>
+    <!-- Zaten hesabınız var mı? kısmı -->
+    <p>Zaten hesabınız var mı? <a href="/login">Giriş yap</a></p>
+  </div>
+</div>
+<div id="error-popup" class="error-popup" style="display: none;">
+    <p>Kullanıcı zaten kayıtlı.</p>
+    <button id="close-popup" class="btn-close">Kapat</button>
+</div>
+<script>
+    const errorPopup = document.getElementById("error-popup");
+    const closePopup = document.getElementById("close-popup");
+
+    closePopup.addEventListener("click", function() {
+        errorPopup.style.display = "none";
+    });
+
+    {% if error_message %}
+    errorPopup.style.display = "block";
+    {% endif %}
+</script>
+</body>
+</html>
