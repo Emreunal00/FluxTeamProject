@@ -233,30 +233,6 @@ Mission: Impossible - Rogue Nation
 Mission: Impossible - Fallout
 Mission: Impossible 7
 Mission: Impossible 8
-James Bond: Dr. No
-James Bond: From Russia with Love
-James Bond: Goldfinger
-James Bond: Thunderball
-James Bond: You Only Live Twice
-James Bond: On Her Majesty's Secret Service
-James Bond: Diamonds Are Forever
-James Bond: Live and Let Die
-James Bond: The Man with the Golden Gun
-James Bond: The Spy Who Loved Me
-James Bond: Moonraker
-James Bond: For Your Eyes Only
-James Bond: Octopussy
-James Bond: A View to a Kill
-James Bond: The Living Daylights
-James Bond: Licence to Kill
-James Bond: GoldenEye
-James Bond: Tomorrow Never Dies
-James Bond: The World Is Not Enough
-James Bond: Casino Royale
-James Bond: Quantum of Solace
-James Bond: Skyfall
-James Bond: Spectre
-James Bond: No Time to Die
 Pirates of the Caribbean: The Curse of the Black Pearl
 Pirates of the Caribbean: Dead Man's Chest
 Pirates of the Caribbean: At World's End
@@ -319,7 +295,6 @@ The Twilight Saga: Breaking Dawn - Part 2
 The Chronicles of Narnia: The Lion, the Witch and the Wardrobe
 The Chronicles of Narnia: Prince Caspian
 The Chronicles of Narnia: The Voyage of the Dawn Treader
-The Chronicles of Narnia: The Silver Chair
 The Maze Runner
 Maze Runner: The Scorch Trials
 Maze Runner: The Death Cure

@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FLUX</title>
     <!-- CSS Bağlantısı -->
-    <link rel="stylesheet" href="../frontend/styles_dashboard.css"> <!-- styles.css'in doğru dizin yolunu belirtin -->
+    <link rel="stylesheet" href="../frontend/styles_dashboard.css">
 </head>
 <body>
 
     <!-- Navbar -->
     <div class="navbar">
-        <a href="/dashboard" class="flux-btn">FLUX</a> <!-- FLUX butonu -->
+        <a href="/dashboard" class="flux-btn">FLUX</a>
         <div class="profile-container">
             <button class="profile-btn">Profil</button>
             <div class="dropdown-menu">
@@ -19,6 +19,7 @@
                 <a href="/favorites" class="dropdown-item">Favoriler</a>
                 <a href="/watched" class="dropdown-item">İzlediklerim</a>
                 <a href="/watchlist" class="dropdown-item">İzleme Listesi</a>
+                <a href="/ratings" class="dropdown-item">Puanlarım</a>
             </div>
         </div>
         <a href="/logout" class="logout-btn">Çıkış Yap</a>
@@ -69,6 +70,9 @@
             <p id="popup-director"><strong>Yönetmen:</strong> </p>
             <p id="popup-actors"><strong>Oyuncular:</strong> </p>
             <p id="popup-imdb"><strong>IMDb Puanı:</strong> </p>
+            <button id="add-to-favorites" class="btn btn-primary">Favorilere Ekle</button>
+            <button id="add-to-watched" class="btn btn-primary">İzlenenlere Ekle</button>
+            <button id="add-to-watchlist" class="btn btn-primary">İzleme Listesine Ekle</button>
         </div>
     </div>
 
@@ -84,6 +88,11 @@
         const popupDirector = document.getElementById('popup-director');
         const popupActors = document.getElementById('popup-actors');
         const popupImdb = document.getElementById('popup-imdb');
+        const addToFavorites = document.getElementById('add-to-favorites');
+        const addToWatched = document.getElementById('add-to-watched');
+        const addToWatchlist = document.getElementById('add-to-watchlist');
+
+        let currentMovieData = {};
 
         movieCards.forEach(card => {
             card.addEventListener('click', () => {
@@ -91,6 +100,7 @@
                 fetch(`/movie_details?title=${title}`)
                     .then(response => response.json())
                     .then(data => {
+                        currentMovieData = data;
                         popupTitle.textContent = data.Title;
                         popupPoster.src = data.Poster;
                         popupPlot.innerHTML = `<strong>Konu:</strong> ${data.Plot}`;
@@ -113,6 +123,54 @@
             if (event.target === moviePopup) {
                 moviePopup.style.display = 'none';
             }
+        });
+
+        addToFavorites.addEventListener('click', () => {
+            fetch('/add_to_favorites', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ movie_data: JSON.stringify(currentMovieData) })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => {
+                alert('Favorilere eklenirken bir hata oluştu.');
+                console.error('Error:', error);
+            });
+        });
+
+        addToWatched.addEventListener('click', () => {
+            fetch('/add_to_watched', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ movie_data: JSON.stringify(currentMovieData) })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => {
+                alert('İzlenenlere eklenirken bir hata oluştu.');
+                console.error('Error:', error);
+            });
+        });
+
+        addToWatchlist.addEventListener('click', () => {
+            fetch('/add_to_watchlist', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ movie_data: JSON.stringify(currentMovieData) })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => {
+                alert('İzleme listesine eklenirken bir hata oluştu.');
+                console.error('Error:', error);
+            });
         });
     </script>
 </body>
