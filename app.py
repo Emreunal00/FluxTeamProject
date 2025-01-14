@@ -150,6 +150,7 @@ def home():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    error_message = None
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -158,23 +159,24 @@ def login():
             session['user'] = username  # Kullanıcıyı session'a ekle
             return redirect(url_for('dashboard'))
         else:
-            return "Giriş başarısız! Kullanıcı adı veya şifre yanlış."
+            error_message = "Giriş başarısız! Kullanıcı adı veya şifre yanlış."
     
-    return render_template("login.html")
+    return render_template("login.html", error_message=error_message)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    error_message = None
     if request.method == 'POST':
         username = request.form['username']
         email = request.form['email']
         password = request.form['password']
         
         if register_user(username, email, password):
-            return redirect(url_for('home'))
+            return redirect(url_for('dashboard'))
         else:
-            return "Kullanıcı adı veya e-posta zaten kayıtlı."
+            error_message = "Kullanıcı adı veya e-posta zaten kayıtlı."
     
-    return render_template("register.html")
+    return render_template("register.html", error_message=error_message)
 
 @app.route('/dashboard')
 def dashboard():

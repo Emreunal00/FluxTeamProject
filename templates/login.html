@@ -34,5 +34,24 @@
   </div>
 </div>
 
+<div id="error-popup" class="error-popup" style="display: none;">
+    <p>Giriş başarısız! Kullanıcı adı veya şifre yanlış.</p>
+    <button id="close-popup" class="btn-close">Kapat</button>
+</div>
+
+<!-- JavaScript kodları burada -->
+<script>
+    const errorPopup = document.getElementById("error-popup");
+    const closePopup = document.getElementById("close-popup");
+
+    closePopup.addEventListener("click", function() {
+        errorPopup.style.display = "none";
+    });
+
+    {% if error_message %}
+    errorPopup.style.display = "block";
+    {% endif %}
+</script>
+
 </body>
 </html>

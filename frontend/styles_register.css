@@ -16,6 +16,10 @@ body {
   background: #121212; /* Dark background for the project */
   width: 100%;
   overflow: hidden;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background-color: #121212;
+  color: #FFFFFF;
 }
 
 .ring {
@@ -165,4 +169,82 @@ body {
 
 .login .links a:hover {
   text-decoration: underline;
+}
+
+/* Register Konteyneri */
+.register-container {
+  width: 30%;
+  margin: 100px auto;
+  background-color: #1C1C1C;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: #FFFFFF;
+}
+
+.register-container h2 {
+  text-align: center;
+  color: #3498DB;
+}
+
+.register-container label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.register-container input[type="text"],
+.register-container input[type="email"],
+.register-container input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.register-container button {
+  padding: 10px 20px;
+  background-color: #2980B9;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.register-container button:hover {
+  background-color: #3498DB;
+}
+
+/* Error Pop-up */
+.error-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #e74c3c;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    text-align: center;
+}
+
+.error-popup p {
+    margin: 0 0 10px 0;
+}
+
+.error-popup .btn-close {
+    padding: 10px 20px;
+    background-color: #c0392b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.error-popup .btn-close:hover {
+    background-color: #e74c3c;
 }
