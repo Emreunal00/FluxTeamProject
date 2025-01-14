@@ -35,6 +35,19 @@ def save_users(users):
     with open("users.yaml", "w") as file:
         yaml.dump({"users": users}, file)
 
+# Profil resimlerini YAML dosyasından oku
+def load_profile_images():
+    if not os.path.exists("profile_pics.yaml"):
+        return {}
+    with open("profile_pics.yaml", "r") as file:
+        data = yaml.safe_load(file)
+        return data.get('profile_pics', {})
+
+# Profil resimlerini YAML dosyasına kaydet
+def save_profile_images(profile_images):
+    with open("profile_pics.yaml", "w") as file:
+        yaml.dump({"profile_pics": profile_images}, file)
+
 # Kullanıcı kaydını yap
 def register_user(username, email, password):
     users = load_users()
@@ -61,7 +74,7 @@ def login_user(username, password):
     return False
 
 # Kullanıcıyı güncelle
-def update_user_info(username, new_username=None, new_password=None):
+def update_user_info(username, new_username=None, new_password=None, profile_image_path=None):
     users = load_users()
 
     for user in users:
@@ -70,6 +83,8 @@ def update_user_info(username, new_username=None, new_password=None):
                 user['username'] = new_username
             if new_password:
                 user['password'] = new_password
+            if profile_image_path:
+                user['profile_image'] = profile_image_path
             save_users(users)
             return True
 
@@ -125,6 +140,8 @@ def get_random_movies():
 
     return recommended_movies
 
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/')
 def home():
@@ -178,6 +195,7 @@ def profile():
     
     username = session['user']
     users = load_users()
+    profile_images = load_profile_images()
 
     # Kullanıcıyı bul
     user_info = next((user for user in users if user['username'] == username), None)
@@ -187,7 +205,7 @@ def profile():
             'profile.html',
             user_username=user_info['username'],
             user_email=user_info['email'],
-            user_profile_image=user_info.get('profile_image', 'default_image.png')  # Varsayılan bir resim kullanılır
+            user_profile_image=profile_images.get(username, 'default_image.png')  # Varsayılan bir resim kullanılır
         )
     
     return "Kullanıcı bilgileri bulunamadı!"
@@ -201,12 +219,52 @@ def update_profile():
     current_password = request.form['current-password']
     new_password = request.form['new-password']
     new_username = request.form['new-username']
-    
-    if update_user_info(username, new_username=new_username, new_password=new_password):
-        session['user'] = new_username  # Oturumda güncellenmiş kullanıcı adı
+    profile_image = request.files['profile-image']  # Profil resmini al
+
+    if profile_image and allowed_file(profile_image.filename):
+        filename = secure_filename(profile_image.filename)
+        profile_image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        profile_image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    else:
+        profile_image_path = None
+
+    if update_user_info(username, new_username=new_username, new_password=new_password, profile_image_path=profile_image_path):
+        if new_username:
+            session['user'] = new_username  # Oturumda güncellenmiş kullanıcı adı
+        
+        if profile_image_path:
+            profile_images = load_profile_images()
+            profile_images[new_username or username] = profile_image_path
+            save_profile_images(profile_images)
+        
         return redirect(url_for('profile'))  # Profil sayfasına yönlendir
     else:
         return "Kullanıcı bilgileri güncellenemedi!"  # Hata mesajı
+
+@app.route('/update_profile_image', methods=['POST'])
+def update_profile_image():
+    if 'user' not in session:  # Eğer oturum yoksa giriş sayfasına yönlendir
+        return redirect(url_for('home'))
+    
+    username = session['user']
+    profile_image = request.files['profile-image']  # Profil resmini al
+
+    if profile_image and allowed_file(profile_image.filename):
+        filename = secure_filename(profile_image.filename)
+        profile_image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        
+        # Ensure the upload folder exists
+        os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+        
+        profile_image.save(profile_image_path)
+
+        profile_images = load_profile_images()
+        profile_images[username] = profile_image_path
+        save_profile_images(profile_images)
+        
+        return redirect(url_for('profile'))  # Profil sayfasına yönlendir
+    else:
+        return "Geçersiz dosya formatı!"  # Hata mesajı
 
 # Filmler rotası
 @app.route('/movies', methods=['GET', 'POST'])
