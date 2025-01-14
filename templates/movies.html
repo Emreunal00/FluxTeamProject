@@ -17,6 +17,7 @@
             <div class="dropdown-menu">
                 <a href="/profile" class="dropdown-item">Profili Düzenle</a>
                 <a href="/favorites" class="dropdown-item">Favoriler</a>
+                <a href="/watched" class="dropdown-item">İzlediklerim</a>
             </div>
         </div>
         <a href="/logout" class="logout-btn">Çıkış Yap</a>
@@ -70,6 +71,7 @@
                                 </p>
                                 <!-- Favorilere Ekle -->
                                 <button class="btn btn-success add-to-favorites" data-movie='{{ movie | tojson }}'>Favorilere Ekle</button>
+                                <button class="btn btn-success add-to-watched" data-movie='{{ movie | tojson }}'>İzlenenlere Ekle</button>
                             </div>
                         </div>
                     </div>
@@ -100,6 +102,33 @@
                     })
                     .catch(error => {
                         alert('Favorilere eklenirken bir hata oluştu.');
+                        console.error('Error:', error);
+                    });
+                });
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.add-to-watched');
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const movieData = button.getAttribute('data-movie');
+                    
+                    fetch('/add_to_watched', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ movie_data: movieData })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert(data.message);
+                        if (data.success) {
+                            window.location.href = '/watched'; // Redirect to favorites page
+                        }
+                    })
+                    .catch(error => {
+                        alert('İzlenenlere eklenirken bir hata oluştu.');
                         console.error('Error:', error);
                     });
                 });

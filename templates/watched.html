@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FLUX</title>
-    <!-- CSS Bağlantısı -->
-    <link rel="stylesheet" href="../frontend/styles_dashboard.css"> <!-- styles.css'in doğru dizin yolunu belirtin -->
+    <title>İzlenen Filmler</title>
+    <link rel="stylesheet" href="../frontend/styles_watched.css">
 </head>
 <body>
 
@@ -23,37 +22,17 @@
         <a href="/logout" class="logout-btn">Çıkış Yap</a>
     </div>
     
-    <!-- Dashboard Container -->
+    <!-- İzlenen Filmler Container -->
     <div class="dashboard-container">
-        <h2 style="text-align: center;">Flux Movie Database</h2>
-        <!-- Arama Formu -->
-        <div class="button-container">
-            <form method="POST" action="/movies" class="mb-4">
-                <div class="input-group">
-                    <input 
-                        type="text" 
-                        name="movie_name" 
-                        class="form-control" 
-                        placeholder="Film adını giriniz..." 
-                        required>
-                    <button type="submit" class="btn btn-primary">Ara</button>
+        <h2 style="text-align: center;">İzlediğiniz Filmler</h2>
+        <div class="movie-container">
+            {% for movie in watched_movies %}
+                <div class="movie-card" data-title="{{ movie.title }}">
+                    <img src="{{ movie.poster or 'https://via.placeholder.com/300x450?text=No+Image' }}" alt="Film Posteri">
+                    <h3>{{ movie.title }}</h3>
+                    <p>{{ movie.year or 'Bilinmiyor' }}</p>
                 </div>
-            </form>
-        </div>
-
-        <!-- Film Önerileri -->
-        <div class="recommendations-container">
-            <h3>İlginizi Çekebilir</h3>
-            <!-- Film Kartları Konteyneri -->
-            <div class="movie-container">
-                {% for movie in recommended_movies %}
-                    <div class="movie-card" data-title="{{ movie.title }}">
-                        <img src="{{ movie.poster }}" alt="Film Posteri">
-                        <h3>{{ movie.title }}</h3>
-                        <p>{{ movie.year }}</p>
-                    </div>
-                {% endfor %}
-            </div>
+            {% endfor %}
         </div>
     </div>
 
@@ -68,6 +47,7 @@
             <p id="popup-director"><strong>Yönetmen:</strong> </p>
             <p id="popup-actors"><strong>Oyuncular:</strong> </p>
             <p id="popup-imdb"><strong>IMDb Puanı:</strong> </p>
+            <button id="remove-from-watched" class="btn btn-primary">İzlenenlerden Çıkar</button>
         </div>
     </div>
 
@@ -83,10 +63,14 @@
         const popupDirector = document.getElementById('popup-director');
         const popupActors = document.getElementById('popup-actors');
         const popupImdb = document.getElementById('popup-imdb');
+        const removeFromWatched = document.getElementById('remove-from-watched');
+
+        let currentTitle = '';
 
         movieCards.forEach(card => {
             card.addEventListener('click', () => {
                 const title = card.getAttribute('data-title');
+                currentTitle = title;
                 fetch(`/movie_details?title=${title}`)
                     .then(response => response.json())
                     .then(data => {
@@ -113,6 +97,33 @@
                 moviePopup.style.display = 'none';
             }
         });
+
+        removeFromWatched.addEventListener('click', () => {
+            fetch('/remove_from_watched', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title: currentTitle })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    document.querySelector(`.movie-card[data-title="${currentTitle}"]`).remove();
+                    moviePopup.style.display = 'none';
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                alert('İzlenenlerden çıkarılırken bir hata oluştu.');
+                console.error('Error:', error);
+            });
+        });
     </script>
+
 </body>
 </html>
