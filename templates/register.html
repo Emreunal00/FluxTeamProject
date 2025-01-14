@@ -31,10 +31,25 @@
         <input type="submit" value="Kayıt Ol">
       </div>
     </form>
-    <!-- Hesabınız yok mu? Kayıt Ol kısmı -->
+    <!-- Zaten hesabınız var mı? kısmı -->
     <p>Zaten hesabınız var mı? <a href="/login">Giriş yap</a></p>
   </div>
 </div>
+<div id="error-popup" class="error-popup" style="display: none;">
+    <p>Kullanıcı zaten kayıtlı.</p>
+    <button id="close-popup" class="btn-close">Kapat</button>
+</div>
+<script>
+    const errorPopup = document.getElementById("error-popup");
+    const closePopup = document.getElementById("close-popup");
 
+    closePopup.addEventListener("click", function() {
+        errorPopup.style.display = "none";
+    });
+
+    {% if error_message %}
+    errorPopup.style.display = "block";
+    {% endif %}
+</script>
 </body>
 </html>
