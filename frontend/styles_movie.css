@@ -22,12 +22,14 @@ body {
     font-size: 16px;
     margin-left: 15px;
 }
+
 .navbar .flux-btn {
     font-size: 22px;
     color: #FFFFFF;
     font-weight: bold;
     margin-left: 20px;
 }
+
 .navbar .logout-btn {
     font-size: 16px;
     color: #FFFFFF;
@@ -109,45 +111,14 @@ body {
     background-color: #1C1C1C;
     color: #FFFFFF;
     border-radius: 5px;
+    margin-right: 10px; /* Arama çubuğu ve buton arasına 2px boşluk */
 }
 
-.input-group button {
-    font-size: 18px;
-    padding: 15px 30px;
-    background-color: #2980B9;
-    color: #FFFFFF;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    margin-left: 10px;
-    position: relative;
-    z-index: 0;
-}
-
-/* Buton öncesi efekt */
-.input-group button::before {
-    content: "";
-    background: linear-gradient(45deg, #48FF00, #00FFD5, #002BFF, #FF00C8);
-    position: absolute;
-    top: -2px;
-    left: -2px;
-    background-size: 600%;
-    z-index: -1;
-    width: calc(100% + 4px);
-    height: calc(100% + 4px);
-    filter: blur(8px);
-    animation: glowing 20s linear infinite;
-    transition: opacity .3s ease-in-out;
-    border-radius: 5px;
-    opacity: 0;
-}
-
-.input-group button:hover::before {
-    opacity: 1;
-}
-
-.input-group button:hover {
-    background-color: #3498DB;
+/* Neon ışık parlaması animasyonu */
+@keyframes glowing {
+    0% { background-position: 0 0; }
+    50% { background-position: 400% 0; }
+    100% { background-position: 0 0; }
 }
 
 /* Butonlar */
@@ -163,10 +134,41 @@ body {
     z-index: 0;
 }
 
-/* Buton öncesi efekt */
+/* Buton öncesi neon ışık efekti */
 .btn-success::before {
     content: "";
-    background: linear-gradient(45deg, #48FF00, #00FFD5, #002BFF, #FF00C8);
+    background: linear-gradient(45deg, #00FFD5, #002BFF);
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    background-size: 600%;
+    z-index: -1;
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    filter: blur(8px);
+    animation: glowing 20s linear infinite;
+    transition: opacity .3s ease-in-out;
+    border-radius: 5px;
+    opacity: 0;
+}
+
+.btn-primary {
+    background-color: #2980B9; /* Mavi buton */
+    color: #FFFFFF;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    position: relative;
+    z-index: 0;
+    overflow: hidden;
+}
+
+/* Buton öncesi neon ışık efekti */
+.btn-primary::before {
+    content: "";
+    background: linear-gradient(45deg, #00FFD5, #002BFF);
     position: absolute;
     top: -2px;
     left: -2px;
@@ -190,6 +192,14 @@ body {
     background-color: #3498DB;
 }
 
+.btn-primary:hover::before {
+    opacity: 1;
+}
+
+.btn-primary:hover {
+    background-color: #3498DB;
+}
+
 /* Başlık */
 .dashboard-container h2 {
     font-size: 50px;
@@ -203,21 +213,55 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 40px; /* Arama çubuğu ile film kartları arasına boşluk ekledik */
-    text-align: center; /* Kartları yatayda ortala */
+    margin-top: 40px;
+    text-align: center;
 }
 
 .card {
-    background-color: #2C3E50;
+    background-color: #2C3E50; /* Koyu renk arkaplan */
     color: #FFFFFF;
     border-radius: 5px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    margin: 20px auto; /* Kartları ortalamak için */
-    width: 80%; /* Kart genişliği */
+    margin: 20px auto;
+    width: 80%;
     display: flex;
     flex-direction: row;
+    position: relative;
+    transition: transform 0.3s ease-in-out; /* Yumuşak büyüme animasyonu */
+    border: 1px solid #2C3E50; /* Rengi sabitleme */
 }
 
+/* Neon Çerçeve Efekti - İmleç üzerine gelince */
+.card:hover::before {
+    content: "";
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border-radius: 10px;
+    z-index: -1;
+    filter: blur(8px);
+    animation: neon-glow 1.5s ease-in-out infinite alternate;
+}
+
+/* Neon ışık parlaması */
+@keyframes neon-glow {
+  0% {
+    box-shadow: 0 0 10px #0b8dc9, 0 0 20px #0b8dc9;
+  }
+  100% {
+    box-shadow: 0 0 20px #0b8dc9, 0 0 30px #0b8dc9;
+  }
+}
+
+/* Kartın üzerine gelindiğinde büyümesi */
+.card:hover {
+    transform: scale(1.05); /* Kart büyümesi */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5); /* Daha güçlü gölge efekti */
+}
+
+/* Film Kartı Görseli */
 .card img {
     width: 250px;
     height: 350px;
@@ -244,10 +288,4 @@ body {
 .text-center {
     text-align: center;
     margin-top: 20px;
-}
-
-@keyframes glowing {
-  0% {background-position: 0 0;}
-  50% {background-position: 400% 0;}
-  100% {background-position: 0 0;}
 }
