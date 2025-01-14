@@ -20,7 +20,7 @@
     <div class="profile-container">
         <h2>Profil Bilgileriniz</h2>
         <div class="profile-info">
-            <img src="default-profile.jpg" alt="Profil Resmi" id="profile-image">
+            <img src="{{ user_profile_image }}" alt="Profil Resmi" id="profile-image">
             <div>
                 <p><strong>Kullanıcı Adı:</strong> {{ user_username }}</p>
                 <p><strong>E-posta:</strong> {{ user_email }}</p>
@@ -30,39 +30,26 @@
         <button class="update-btn" id="update-profile-btn">Profil Resmini Güncelle</button>
 
         <div id="image-upload-container" style="display: none;">
-            <form id="image-upload-form" enctype="multipart/form-data">
-                <input type="file" name="profileImage" accept="image/*" id="profile-image-input">
-                <button type="submit" class="btn-success">Yükle</button>
+            <form id="image-upload-form" action="/update_profile_image" method="POST" enctype="multipart/form-data">
+                <input type="file" name="profile-image" accept="image/*" id="profile-image-input" style="display: none;">
+                <button type="submit" class="btn-success" id="upload-button">Yükle</button>
             </form>
         </div>
     </div>
 
     <!-- JavaScript kodları burada -->
     <script>
-        window.onload = function() {
-            fetch('/get-user-profile')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('profile-image').src = data.profile_image || 'default-profile.jpg';
-                })
-                .catch(error => console.error('Error fetching profile data:', error));
-        };
-
         const updateProfileBtn = document.getElementById("update-profile-btn");
         const profileImageInput = document.getElementById("profile-image-input");
+        const uploadButton = document.getElementById("upload-button");
 
         updateProfileBtn.addEventListener("click", function() {
             profileImageInput.click();
         });
 
         profileImageInput.addEventListener("change", function() {
-            const file = profileImageInput.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onloadend = function() {
-                    document.getElementById("profile-image").src = reader.result;
-                };
-                reader.readAsDataURL(file);
+            if (profileImageInput.files.length > 0) {
+                uploadButton.click();
             }
         });
     </script>
