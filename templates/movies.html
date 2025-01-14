@@ -5,13 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FLUX Dashboard</title>
     <!-- CSS Bağlantısı -->
-    <link rel="stylesheet" href="../frontend/styles_movie.css"> <!-- styles_movie.css'in doğru yolunu kontrol edin -->
+    <link rel="stylesheet" href="../frontend/styles_movie.css">
+    <style>
+        .star {
+            font-size: 24px;
+            cursor: pointer;
+            color: #ccc;
+        }
+        .star.selected {
+            color: #FFD700;
+        }
+    </style>
 </head>
 <body>
 
     <!-- Navbar -->
     <div class="navbar">
-        <a href="/dashboard" class="flux-btn">FLUX</a> <!-- FLUX butonu -->
+        <a href="/dashboard" class="flux-btn">FLUX</a>
         <div class="profile-container">
             <button class="profile-btn">Profil</button>
             <div class="dropdown-menu">
@@ -19,6 +29,7 @@
                 <a href="/favorites" class="dropdown-item">Favoriler</a>
                 <a href="/watched" class="dropdown-item">İzlediklerim</a>
                 <a href="/watchlist" class="dropdown-item">İzleme Listesi</a>
+                <a href="/ratings" class="dropdown-item">Puanlarım</a>
             </div>
         </div>
         <a href="/logout" class="logout-btn">Çıkış Yap</a>
@@ -74,6 +85,14 @@
                                 <button class="btn btn-success add-to-favorites" data-movie='{{ movie | tojson }}'>Favorilere Ekle</button>
                                 <button class="btn btn-success add-to-watched" data-movie='{{ movie | tojson }}'>İzlenenlere Ekle</button>
                                 <button class="btn btn-success add-to-watchlist" data-movie='{{ movie | tojson }}'>İzleme Listesine Ekle</button>
+                                <!-- Puanlama Sistemi -->
+                                <div class="rating" data-rating="{{ movie.user_rating|default(0) }}">
+                                    <span class="star" data-value="1">&#9733;</span>
+                                    <span class="star" data-value="2">&#9733;</span>
+                                    <span class="star" data-value="3">&#9733;</span>
+                                    <span class="star" data-value="4">&#9733;</span>
+                                    <span class="star" data-value="5">&#9733;</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -99,7 +118,7 @@
                     .then(data => {
                         alert(data.message);
                         if (data.success) {
-                            window.location.href = '/favorites'; // Redirect to favorites page
+                            window.location.href = '/favorites';
                         }
                     })
                     .catch(error => {
@@ -126,7 +145,7 @@
                     .then(data => {
                         alert(data.message);
                         if (data.success) {
-                            window.location.href = '/watched'; // Redirect to favorites page
+                            window.location.href = '/watched';
                         }
                     })
                     .catch(error => {
@@ -158,6 +177,49 @@
                     })
                     .catch(error => {
                         alert('İzleme listesine eklenirken bir hata oluştu.');
+                        console.error('Error:', error);
+                    });
+                });
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const stars = document.querySelectorAll('.star');
+
+            stars.forEach(star => {
+                const rating = star.parentNode.getAttribute('data-rating');
+                const siblings = star.parentNode.children;
+                for (let i = 0; i < rating; i++) {
+                    siblings[i].classList.add('selected');
+                }
+
+                star.addEventListener('click', function() {
+                    const value = this.getAttribute('data-value');
+                    for (let i = 0; i < siblings.length; i++) {
+                        siblings[i].classList.remove('selected');
+                    }
+                    for (let i = 0; i < value; i++) {
+                        siblings[i].classList.add('selected');
+                    }
+                    this.parentNode.setAttribute('data-rating', value);
+
+                    const movieData = this.parentNode.parentNode.querySelector('.add-to-favorites').getAttribute('data-movie');
+                    fetch('/save_rating', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ movie_data: movieData, rating: value })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Puan kaydedildi.');
+                        } else {
+                            alert('Puan kaydedilirken bir hata oluştu.');
+                        }
+                    })
+                    .catch(error => {
+                        alert('Puan kaydedilirken bir hata oluştu.');
                         console.error('Error:', error);
                     });
                 });

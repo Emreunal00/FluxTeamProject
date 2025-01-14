@@ -1,4 +1,3 @@
-/* Genel Ayarlar */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -6,18 +5,17 @@ body {
     color: #FFFFFF;
 }
 
-/* Navbar */
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #2C3E50; /* Mavi tonlarında navbar */
+    background-color: #2C3E50;
     padding: 20px 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .navbar a {
-    color: #3498DB; /* Mavi tonlarında linkler */
+    color: #3498DB;
     text-decoration: none;
     font-size: 16px;
     margin-left: 15px;
@@ -40,7 +38,6 @@ body {
     text-decoration: underline;
 }
 
-/* Profil Konteyneri */
 .profile-container {
     width: 50%;
     margin: 50px auto;
@@ -56,7 +53,6 @@ body {
     color: #3498DB;
 }
 
-/* Profil Bilgileri */
 .profile-info {
     display: flex;
     align-items: center;
@@ -78,7 +74,6 @@ body {
     margin: 5px 0;
 }
 
-/* Profil Butonu */
 .update-btn {
     padding: 10px 20px;
     background-color: #2980B9;
@@ -98,7 +93,7 @@ body {
     text-align: center;
     color: #3498DB;
 }
-/* Şifre Değiştirme Formu */
+
 .password-change-container {
     margin-top: 20px;
     padding: 20px;
@@ -134,7 +129,6 @@ body {
     background-color: #3498DB;
 }
 
-/* Kullanıcı Adı Değiştirme Formu */
 .username-change-container {
     margin-top: 20px;
     padding: 20px;
@@ -170,7 +164,6 @@ body {
     background-color: #3498DB;
 }
 
-/* Profil Sayfası Responsive */
 @media (max-width: 768px) {
     .profile-container {
         width: 80%;

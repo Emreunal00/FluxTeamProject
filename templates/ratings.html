@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>İzleme Listesi</title>
-    <link rel="stylesheet" href="../frontend/styles_watchlist.css">
+    <title>Favori Filmler</title>
+    <link rel="stylesheet" href="../frontend/styles_ratings.css">
 </head>
 <body>
 
@@ -24,10 +24,11 @@
         <a href="/logout" class="logout-btn">Çıkış Yap</a>
     </div>
     
+    <!-- Favori Filmler Container -->
     <div class="dashboard-container">
-        <h2 style="text-align: center;">İzleme Listesi</h2>
+        <h2 style="text-align: center;">Puanlarınız</h2>
         <div class="movie-container">
-            {% for movie in watchlist_movies %}
+            {% for movie in favorite_movies %}
                 <div class="movie-card" data-title="{{ movie.title }}">
                     <img src="{{ movie.poster or 'https://via.placeholder.com/300x450?text=No+Image' }}" alt="Film Posteri">
                     <h3>{{ movie.title }}</h3>
@@ -48,7 +49,7 @@
             <p id="popup-director"><strong>Yönetmen:</strong> </p>
             <p id="popup-actors"><strong>Oyuncular:</strong> </p>
             <p id="popup-imdb"><strong>IMDb Puanı:</strong> </p>
-            <button id="remove-from-watchlist" class="btn btn-primary">İzleme Listesinden Kaldır</button>
+            <button id="remove-from-favorites" class="btn btn-primary">Favorilerden Kaldır</button>
         </div>
     </div>
 
@@ -64,7 +65,7 @@
         const popupDirector = document.getElementById('popup-director');
         const popupActors = document.getElementById('popup-actors');
         const popupImdb = document.getElementById('popup-imdb');
-        const removeFromWatchlist = document.getElementById('remove-from-watchlist');
+        const removeFromFavorites = document.getElementById('remove-from-favorites');
 
         let currentTitle = '';
 
@@ -99,8 +100,8 @@
             }
         });
 
-        removeFromWatchlist.addEventListener('click', () => {
-            fetch('/remove_from_watchlist', {
+        removeFromFavorites.addEventListener('click', () => {
+            fetch('/remove_from_favorites', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ title: currentTitle })
@@ -120,7 +121,7 @@
                 }
             })
             .catch(error => {
-                alert('İzleme listesinden çıkarılırken bir hata oluştu.');
+                alert('Favorilerden çıkarılırken bir hata oluştu.');
                 console.error('Error:', error);
             });
         });

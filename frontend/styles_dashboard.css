@@ -1,23 +1,21 @@
-/* Genel Ayarlar */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    background-color: #121212; /* Koyu arka plan */
-    color: #FFFFFF; /* Beyaz metin */
+    background-color: #121212;
+    color: #FFFFFF;
 }
 
-/* Navbar */
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #2C3E50; /* Mavi tonlarında navbar */
+    background-color: #2C3E50;
     padding: 15px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .navbar a {
-    color: #3498DB; /* Mavi tonlarında linkler */
+    color: #3498DB;
     text-decoration: none;
     font-size: 16px;
     margin-left: 15px;
@@ -35,11 +33,10 @@ body {
     margin-left: 20px;
 }
 
-/* Profil Butonu ve Dropdown Menü Sağda */
 .navbar .profile-container {
     position: relative;
     display: inline-block;
-    margin-left: auto; /* Profil butonunu sağa itmek için */
+    margin-left: auto;
 }
 
 .navbar .profile-btn {
@@ -51,21 +48,6 @@ body {
     font-size: 16px;
 }
 
-/* Navbar */
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #2C3E50; /* Mavi tonlarında navbar */
-    padding: 15px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.navbar a {
-    color: #3498DB; /* Mavi tonlarında linkler */
-    text-decoration: none;
-    font-size: 16px;
-}
 .navbar .flux-btn {
     font-size: 22px;
     color: #FFFFFF;
@@ -83,7 +65,6 @@ body {
     text-decoration: underline;
 }
 
-/* Profil Butonu ve Dropdown Menüsü */
 .profile-container {
     position: relative;
     display: inline-block;
@@ -91,7 +72,7 @@ body {
 }
 
 .profile-btn {
-    background-color: #2980B9; /* Mavi buton */
+    background-color: #2980B9;
     color: #FFFFFF;
     padding: 10px 20px;
     border: none;
@@ -101,13 +82,13 @@ body {
 }
 
 .profile-btn:hover {
-    background-color: #3498DB; /* Mavi buton hover */
+    background-color: #3498DB;
 }
 
 .dropdown-menu {
     display: none;
     position: absolute;
-    background-color: #34495E; /* Koyu mavi dropdown menüsü */
+    background-color: #34495E;
     min-width: 160px;
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.5);
     z-index: 1;
@@ -123,20 +104,19 @@ body {
 }
 
 .dropdown-item:hover {
-    background-color: #5D6D7E; /* Hover için gri mavi ton */
+    background-color: #5D6D7E;
 }
 
 .profile-container:hover .dropdown-menu {
     display: block;
 }
 
-/* Arama Çubuğu */
 .search-container {
     display: flex;
-    justify-content: center; /* Yatayda ortalar */
-    align-items: center; /* Dikeyde ortalar */
-    height: 100vh; /* Sayfa yüksekliğinin tamamı */
-    margin: 0; /* Sayfanın etrafındaki boşluğu sıfırlar */
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
 }
 
 .input-group {
@@ -182,9 +162,8 @@ body {
     opacity: 1;
 }
 
-/* btn-primary Butonu */
 .btn-primary {
-    background-color: #2980B9; /* Mavi buton */
+    background-color: #2980B9;
     color: #FFFFFF;
     padding: 15px 30px;
     border: none;
@@ -196,7 +175,6 @@ body {
     overflow: hidden;
 }
 
-/* Glowing Efekti */
 .btn-primary::before {
     content: "";
     background: linear-gradient(45deg, #00FFD5, #002BFF);
@@ -214,16 +192,14 @@ body {
     border-radius: 5px;
 }
 
-/* Buton Üzerine Gelince Glowing Efekti */
 .btn-primary:hover::before {
     opacity: 1;
 }
 
 .btn-primary:hover {
-    background-color: #2980B9; /* Hover için daha koyu mavi ton */
+    background-color: #2980B9;
 }
 
-/* Glowing Efekti Animasyonu */
 @keyframes glowing {
     0% {
         background-position: 0 0;
@@ -236,12 +212,8 @@ body {
     }
 }
 
-
-
-
-/* Butonlar */
 .btn-success {
-    background-color: #2980B9; /* Mavi buton */
+    background-color: #2980B9;
     color: #FFFFFF;
     padding: 10px 20px;
     border: none;
@@ -277,40 +249,36 @@ body {
 }
 
 .btn-success:hover {
-    background-color: #3498DB; /* Buton hover */
+    background-color: #3498DB;
 }
 
-/* Başlıklar */
 .dashboard-container h2 {
     font-size: 50px;
-    color: #3498DB; /* Mavi başlık */
+    color: #3498DB;
     text-align: center;
 }
 
 .dashboard-container h3 {
     font-size: 20px;
-    color: #3498DB; /* Mavi başlık */
+    color: #3498DB;
     text-align: center;
-    margin: 0 auto; /* Ortalamak için */
-    display: block; /* Bloc öğe olarak ayarla */
-    padding-top: 20px; /* Üstten biraz boşluk ekleyebiliriz */
+    margin: 0 auto;
+    display: block;
+    padding-top: 20px;
 }
 
-
-/* Film Kartları Konteyneri */
 .movie-container {
     display: grid;
-    grid-template-columns: repeat(10, 1fr); /* 15 sütun */
-    grid-template-rows: repeat(2, auto); /* 2 satır */
-    grid-gap: 20px; /* Kartlar arasındaki boşluk */
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(2, auto);
+    grid-gap: 20px;
     padding: 20px;
-    max-width: 100%; /* Konteyner genişliği */
-    margin: 0 auto; /* Ortalamak için */
+    max-width: 100%;
+    margin: 0 auto;
 }
 
-/* Film Kartları */
 .movie-card {
-    background-color: #1C1C1C; /* Kart arka planı */
+    background-color: #1C1C1C;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     overflow: hidden;
@@ -318,15 +286,13 @@ body {
     transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
 }
 
-/* Film Kartı Hover Efekti - Neon Çerçeve */
 .movie-card:hover {
     transform: translateY(-10px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
-    border: 3px solid #00FFD5, #1900ff, #002BFF; /* Neon çerçeve rengi */
-    animation: neon-border 1.5s infinite alternate; /* Neon efekti animasyonu */
+    border: 3px solid #00FFD5, #1900ff, #002BFF;
+    animation: neon-border 1.5s infinite alternate;
 }
 
-/* Neon Çerçeve Animasyonu */
 @keyframes neon-border {
     0% {
         border-color: #0b8dc9;
@@ -342,14 +308,12 @@ body {
     }
 }
 
-/* Film Poster */
 .movie-card img {
-    width: 100%; /* Poster genişliği */
-    height: auto; /* Poster yüksekliği */
-    border-bottom: 2px solid #3498DB; /* Poster altında mavi çizgi */
+    width: 100%;
+    height: auto;
+    border-bottom: 2px solid #3498DB;
 }
 
-/* Film Başlığı */
 .movie-card h3 {
     font-size: 18px;
     margin: 10px 0;
@@ -357,17 +321,15 @@ body {
     padding: 0 10px;
 }
 
-/* Alt Bilgi */
 .movie-card p {
     font-size: 14px;
-    color: #BDC3C7; /* Açık gri metin */
+    color: #BDC3C7;
     margin: 10px 0;
 }
 
-/* Media Query (Responsive Tasarım) */
 @media (max-width: 768px) {
     .movie-container {
-        grid-template-columns: 1fr; /* Küçük ekranlarda tek sütun */
+        grid-template-columns: 1fr;
     }
 }
 
@@ -377,7 +339,6 @@ body {
   100% {background-position: 0 0;}
 }
 
-/* Movie Pop-up */
 .movie-popup {
     position: fixed;
     top: 50%;
@@ -391,8 +352,8 @@ body {
     align-items: center;
     z-index: 1000;
     border-radius: 10px;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.4); /* Glowing çerçeve */
-    animation: glow 1.5s infinite; /* Animasyon ekleyerek efekt */
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.4);
+    animation: glow 1.5s infinite;
 }
 
 @keyframes glow {
@@ -433,7 +394,6 @@ body {
 .movie-popup {
     backdrop-filter: blur(5px);
 }
-
 
 .close-popup {
     position: absolute;
