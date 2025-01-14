@@ -205,6 +205,7 @@ body {
     position: relative;
     z-index: 0;
     overflow: hidden;
+    transition: background-color 0.3s ease;
 }
 
 /* Glowing Efekti */
@@ -309,9 +310,9 @@ body {
 .movie-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    grid-gap: 20px;
+    grid-template-columns: repeat(10, 1fr); /* En fazla 10 kart */
+    grid-gap: 20px; /* Kartlar arasındaki boşluk */
     padding: 20px;
-    width: 60%;
 }
 
 /* Film Kartları */
@@ -322,7 +323,8 @@ body {
     overflow: hidden;
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
-    width: 20%; /* Kart genişliğini %10'a düşür */
+    width: 100%; /* Kart genişliğini sabit tut */
+    max-width: 200px; /* Maksimum genişlik */
 }
 
 /* Film Kartı Hover Efekti - Neon Çerçeve */

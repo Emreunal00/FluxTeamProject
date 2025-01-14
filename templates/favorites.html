@@ -103,7 +103,12 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ title: currentTitle })
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.success) {
                     document.querySelector(`.movie-card[data-title="${currentTitle}"]`).remove();
