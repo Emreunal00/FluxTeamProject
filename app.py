@@ -8,6 +8,7 @@ from werkzeug.utils import secure_filename
 from models import db  # Import the db instance
 from models.user import User
 from models.favorite import Favorite  # Import the Favorite model
+from models.watched import Watched  # Import the Watched model
 
 app = Flask(__name__, static_folder='frontend')
 app.secret_key = "your_secret_key"  # Session için gerekli olan secret_key
@@ -430,6 +431,94 @@ def remove_movie_from_favorites(title):
     
     db.session.delete(favorite)
     db.session.commit()
+    
+@app.route('/add_to_watched', methods=['POST'])
+def add_to_watched():
+    if 'user' not in session:
+        return jsonify(success=False, message="Oturum açmanız gerekiyor."), 401
+    
+    username = session['user']
+    movie_data = request.json.get('movie_data')  # Film bilgisini al
 
+    # JSON verisini konsola yazdırarak kontrol edin
+    print(f"Received movie_data: {movie_data}")
+    
+    try:
+        # JSON verisini Python dict'e dönüştür
+        movie_dict = json.loads(movie_data)
+    except json.JSONDecodeError as e:
+        # Hata mesajını konsola yazdır
+        print(f"JSONDecodeError: {str(e)}")
+        return jsonify(success=False, message=f"Geçersiz JSON verisi: {str(e)}"), 400
+    
+    # Check if the movie is already in the user's watched list
+    existing_watched = Watched.query.filter_by(username=username, imdb_id=movie_dict['imdbID']).first()
+    if not existing_watched:
+        # Add the movie to the user's watched list
+        new_watched = Watched(
+            username=username,
+            imdb_id=movie_dict['imdbID'],
+            title=movie_dict['Title'],
+            year=movie_dict['Year'],
+            genre=movie_dict['Genre'],
+            director=movie_dict['Director'],
+            actors=movie_dict['Actors'],
+            plot=movie_dict['Plot'],
+            poster=movie_dict['Poster'],
+            imdb_rating=movie_dict['imdbRating']
+        )
+        db.session.add(new_watched)
+        db.session.commit()
+        return jsonify(success=True, message="Film izlenenlere eklendi.")
+    else:
+        return jsonify(success=False, message="Film zaten izlenenler listenizde.")
+    
+@app.route('/watched')
+def watched():
+    if 'user' not in session:
+        return redirect(url_for('home'))
+    
+    username = session['user']
+    watched_movies = Watched.query.filter_by(username=username).all()
+    
+    return render_template('watched.html', watched_movies=watched_movies)
+
+@app.route('/remove_from_watched', methods=['POST'])
+def remove_from_watched():
+    data = request.get_json()
+    title = data.get('title')
+    
+    if not title:
+        return jsonify({'success': False, 'message': 'Film başlığı belirtilmedi.'}), 400
+    
+    try:
+        remove_movie_from_watched(title)
+        return jsonify({'success': True, 'message': 'Film izlenenlerden çıkarıldı.'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 500
+
+def remove_movie_from_watched(title):
+    username = session.get('user')
+    if not username:
+        raise Exception('Kullanıcı oturumu bulunamadı.')
+    
+    watched = Watched.query.filter_by(username=username, title=title).first()
+    if not watched:
+        raise Exception('Film izlenenlerde bulunamadı.')
+    
+    db.session.delete(watched)
+    db.session.commit()
+    
+def remove_movie_watched(title):
+    username = session.get('user')
+    if not username:
+        raise Exception('Kullanıcı oturumu bulunamadı.')
+    
+    favorite = Favorite.query.filter_by(username=username, title=title).first()
+    if not favorite:
+        raise Exception('Film izlenenlerde bulunamadı.')
+    
+    db.session.delete(watched)
+    db.session.commit()
 if __name__ == "__main__":
     app.run(debug=True)
