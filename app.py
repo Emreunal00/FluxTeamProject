@@ -405,5 +405,31 @@ def movie_details():
     else:
         return jsonify({"error": "Film bilgileri alınamadı."}), 500
 
+@app.route('/remove_from_favorites', methods=['POST'])
+def remove_from_favorites():
+    data = request.get_json()
+    title = data.get('title')
+    
+    if not title:
+        return jsonify({'success': False, 'message': 'Film başlığı belirtilmedi.'}), 400
+    
+    try:
+        remove_movie_from_favorites(title)
+        return jsonify({'success': True, 'message': 'Film favorilerden çıkarıldı.'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 500
+
+def remove_movie_from_favorites(title):
+    username = session.get('user')
+    if not username:
+        raise Exception('Kullanıcı oturumu bulunamadı.')
+    
+    favorite = Favorite.query.filter_by(username=username, title=title).first()
+    if not favorite:
+        raise Exception('Film favorilerde bulunamadı.')
+    
+    db.session.delete(favorite)
+    db.session.commit()
+
 if __name__ == "__main__":
     app.run(debug=True)
