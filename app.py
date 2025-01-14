@@ -273,6 +273,15 @@ def movies():
     if 'user' not in session:  # Eğer oturum yoksa giriş sayfasına yönlendir
         return redirect(url_for('home'))
     
+    if request.method == 'GET':
+        imdb_id = request.args.get('imdb_id')
+        if imdb_id:
+            response = requests.get(f"http://www.omdbapi.com/?apikey={OMDB_API_KEY}&i={imdb_id}")
+            if response.status_code == 200:
+                return jsonify(response.json())
+            else:
+                return jsonify({"error": "Film bilgileri alınamadı."}), 500
+
     movie_data = []  # Film detaylarını saklamak için bir liste
     error_message = None  # Hata mesajını saklamak için değişken
 
@@ -343,7 +352,6 @@ def add_to_favorites():
     else:
         return jsonify(success=False, message="Film zaten favorilerinizde.")
 
-# Favori filmleri gösterme
 @app.route('/favorites')
 def favorites():
     if 'user' not in session:
@@ -387,6 +395,15 @@ def change_username():
         return redirect(url_for('profile'))  # Profil sayfasına yönlendir
     else:
         return "Kullanıcı adı güncellenemedi!"  # Hata mesajı
+
+@app.route('/movie_details')
+def movie_details():
+    title = request.args.get('title')
+    response = requests.get(f"http://www.omdbapi.com/?apikey={OMDB_API_KEY}&t={title}")
+    if response.status_code == 200:
+        return jsonify(response.json())
+    else:
+        return jsonify({"error": "Film bilgileri alınamadı."}), 500
 
 if __name__ == "__main__":
     app.run(debug=True)

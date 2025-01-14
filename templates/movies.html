@@ -50,7 +50,7 @@
         
         <!-- Benzer Filmler -->
         {% if movie_data %}
-            <div class="row">
+            <div class="row movie-container">
                 {% for movie in movie_data %}
                     <div class="col-md-4 mb-4">
                         <div class="card">
@@ -69,10 +69,7 @@
                                     <strong>Konu:</strong> {{ movie.Plot or 'Bilinmiyor' }}
                                 </p>
                                 <!-- Favorilere Ekle -->
-                                <form class="favorite-form">
-                                    <input type="hidden" name="movie_data" value="{{ movie | tojson }}">
-                                    <button type="submit" class="btn btn-success">Favorilere Ekle</button>
-                                </form>
+                                <button class="btn btn-success add-to-favorites" data-movie='{{ movie | tojson }}'>Favorilere Ekle</button>
                             </div>
                         </div>
                     </div>
@@ -84,12 +81,10 @@
     <!-- JavaScript -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const forms = document.querySelectorAll('.favorite-form');
-            forms.forEach(form => {
-                form.addEventListener('submit', function(event) {
-                    event.preventDefault();
-                    const formData = new FormData(form);
-                    const movieData = formData.get('movie_data');
+            const buttons = document.querySelectorAll('.add-to-favorites');
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const movieData = button.getAttribute('data-movie');
                     
                     fetch('/add_to_favorites', {
                         method: 'POST',
@@ -99,6 +94,9 @@
                     .then(response => response.json())
                     .then(data => {
                         alert(data.message);
+                        if (data.success) {
+                            window.location.href = '/favorites'; // Redirect to favorites page
+                        }
                     })
                     .catch(error => {
                         alert('Favorilere eklenirken bir hata oluştu.');

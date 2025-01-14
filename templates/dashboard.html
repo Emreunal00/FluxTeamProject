@@ -46,7 +46,7 @@
             <!-- Film Kartları Konteyneri -->
             <div class="movie-container">
                 {% for movie in recommended_movies %}
-                    <div class="movie-card">
+                    <div class="movie-card" data-title="{{ movie.title }}">
                         <img src="{{ movie.poster }}" alt="Film Posteri">
                         <h3>{{ movie.title }}</h3>
                         <p>{{ movie.year }}</p>
@@ -56,5 +56,62 @@
         </div>
     </div>
 
+    <div id="movie-popup" class="movie-popup" style="display: none;">
+        <div class="popup-content">
+            <span id="close-popup" class="close-popup">&times;</span>
+            <img id="popup-poster" src="" alt="Film Posteri">
+            <h3 id="popup-title"></h3>
+            <p id="popup-plot"><strong>Konu:</strong> </p>
+            <p id="popup-year"><strong>Yıl:</strong> </p>
+            <p id="popup-genre"><strong>Tür:</strong> </p>
+            <p id="popup-director"><strong>Yönetmen:</strong> </p>
+            <p id="popup-actors"><strong>Oyuncular:</strong> </p>
+            <p id="popup-imdb"><strong>IMDb Puanı:</strong> </p>
+        </div>
+    </div>
+
+    <script>
+        const movieCards = document.querySelectorAll('.movie-card');
+        const moviePopup = document.getElementById('movie-popup');
+        const closePopup = document.getElementById('close-popup');
+        const popupPoster = document.getElementById('popup-poster');
+        const popupTitle = document.getElementById('popup-title');
+        const popupPlot = document.getElementById('popup-plot');
+        const popupYear = document.getElementById('popup-year');
+        const popupGenre = document.getElementById('popup-genre');
+        const popupDirector = document.getElementById('popup-director');
+        const popupActors = document.getElementById('popup-actors');
+        const popupImdb = document.getElementById('popup-imdb');
+
+        movieCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const title = card.getAttribute('data-title');
+                fetch(`/movie_details?title=${title}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        popupTitle.textContent = data.Title;
+                        popupPoster.src = data.Poster;
+                        popupPlot.innerHTML = `<strong>Konu:</strong> ${data.Plot}`;
+                        popupYear.innerHTML = `<strong>Yıl:</strong> ${data.Year}`;
+                        popupGenre.innerHTML = `<strong>Tür:</strong> ${data.Genre}`;
+                        popupDirector.innerHTML = `<strong>Yönetmen:</strong> ${data.Director}`;
+                        popupActors.innerHTML = `<strong>Oyuncular:</strong> ${data.Actors}`;
+                        popupImdb.innerHTML = `<strong>IMDb Puanı:</strong> ${data.imdbRating}`;
+
+                        moviePopup.style.display = 'block';
+                    });
+            });
+        });
+
+        closePopup.addEventListener('click', () => {
+            moviePopup.style.display = 'none';
+        });
+
+        window.addEventListener('click', (event) => {
+            if (event.target === moviePopup) {
+                moviePopup.style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>
