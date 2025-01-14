@@ -353,5 +353,39 @@ def favorites():
     
     return render_template('favorites.html', favorite_movies=favorite_movies)
 
+@app.route('/change_password', methods=['POST'])
+def change_password():
+    if 'user' not in session:  # Eğer oturum yoksa giriş sayfasına yönlendir
+        return redirect(url_for('home'))
+    
+    username = session['user']
+    current_password = request.form['current-password']
+    new_password = request.form['new-password']
+
+    users = load_users()
+    user_info = next((user for user in users if user['username'] == username), None)
+
+    if user_info and user_info['password'] == current_password:
+        if update_user_info(username, new_password=new_password):
+            return redirect(url_for('profile'))  # Profil sayfasına yönlendir
+        else:
+            return "Şifre güncellenemedi!"  # Hata mesajı
+    else:
+        return "Mevcut şifre yanlış!"  # Hata mesajı
+
+@app.route('/change_username', methods=['POST'])
+def change_username():
+    if 'user' not in session:  # Eğer oturum yoksa giriş sayfasına yönlendir
+        return redirect(url_for('home'))
+    
+    username = session['user']
+    new_username = request.form['new-username']
+
+    if update_user_info(username, new_username=new_username):
+        session['user'] = new_username  # Oturumda güncellenmiş kullanıcı adı
+        return redirect(url_for('profile'))  # Profil sayfasına yönlendir
+    else:
+        return "Kullanıcı adı güncellenemedi!"  # Hata mesajı
+
 if __name__ == "__main__":
     app.run(debug=True)
