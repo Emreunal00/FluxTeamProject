@@ -155,13 +155,14 @@ body {
     border-radius: 5px;
     position: relative;
     z-index: 0;
+    margin-right: 10px;
 }
 
 .input-group input::before {
     content: "";
     background: linear-gradient(
         45deg,
-        #48FF00, #00FFD5, #002BFF, #FF00C8
+        #00FFD5, #002BFF
     );
     position: absolute;
     top: -2px;
@@ -181,25 +182,24 @@ body {
     opacity: 1;
 }
 
-.input-group button {
-    font-size: 18px; /* Buton fontu daha büyük */
-    padding: 15px 30px;
+/* btn-primary Butonu */
+.btn-primary {
     background-color: #2980B9; /* Mavi buton */
     color: #FFFFFF;
+    padding: 15px 30px;
     border: none;
-    cursor: pointer;
     border-radius: 5px;
-    margin-left: 10px;
+    cursor: pointer;
+    font-size: 18px;
     position: relative;
     z-index: 0;
+    overflow: hidden;
 }
 
-.input-group button::before {
+/* Glowing Efekti */
+.btn-primary::before {
     content: "";
-    background: linear-gradient(
-        45deg,
-        #48FF00,#00FFD5, #002BFF, #FF00C8
-    );
+    background: linear-gradient(45deg, #00FFD5, #002BFF);
     position: absolute;
     top: -2px;
     left: -2px;
@@ -209,18 +209,35 @@ body {
     height: calc(100% + 4px);
     filter: blur(8px);
     animation: glowing 20s linear infinite;
-    transition: opacity .3s ease-in-out;
-    border-radius: 5px;
     opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    border-radius: 5px;
 }
 
-.input-group button:hover::before {
+/* Buton Üzerine Gelince Glowing Efekti */
+.btn-primary:hover::before {
     opacity: 1;
 }
 
-.input-group button:hover {
-    background-color: #3498DB; /* Buton hover için mavi ton */
+.btn-primary:hover {
+    background-color: #2980B9; /* Hover için daha koyu mavi ton */
 }
+
+/* Glowing Efekti Animasyonu */
+@keyframes glowing {
+    0% {
+        background-position: 0 0;
+    }
+    50% {
+        background-position: 400% 0;
+    }
+    100% {
+        background-position: 0 0;
+    }
+}
+
+
+
 
 /* Butonlar */
 .btn-success {
@@ -239,7 +256,7 @@ body {
     content: "";
     background: linear-gradient(
         45deg,
-        #48FF00, #00FFD5, #002BFF, #FF00C8
+        #00FFD5, #002BFF
     );
     position: absolute;
     top: -2px;
@@ -305,23 +322,23 @@ body {
 .movie-card:hover {
     transform: translateY(-10px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
-    border: 3px solid #FF00C8; /* Neon çerçeve rengi */
+    border: 3px solid #00FFD5, #1900ff, #002BFF; /* Neon çerçeve rengi */
     animation: neon-border 1.5s infinite alternate; /* Neon efekti animasyonu */
 }
 
 /* Neon Çerçeve Animasyonu */
 @keyframes neon-border {
     0% {
-        border-color: #FF00C8;
-        box-shadow: 0 0 10px #FF00C8, 0 0 20px #FF00C8, 0 0 30px #FF00C8;
+        border-color: #0b8dc9;
+        box-shadow: 0 0 10px #0b8dc9, 0 0 20px #0b8dc9, 0 0 30px #0b8dc9;
     }
     50% {
-        border-color: #00FFD5;
-        box-shadow: 0 0 10px #00FFD5, 0 0 20px #00FFD5, 0 0 30px #00FFD5;
+        border-color: #0b8dc9;
+        box-shadow: 0 0 10px #0b8dc9, 0 0 20px #0b8dc9, 0 0 30px #0b8dc9;
     }
     100% {
-        border-color: #48FF00;
-        box-shadow: 0 0 10px #48FF00, 0 0 20px #48FF00, 0 0 30px #48FF00;
+        border-color: #0b8dc9;
+        box-shadow: 0 0 10px #0b8dc9, 0 0 20px #0b8dc9, 0 0 30px #0b8dc9;
     }
 }
 

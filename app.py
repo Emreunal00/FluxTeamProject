@@ -103,6 +103,25 @@ def get_random_movies():
                 "title": movie["Title"],
                 "poster": movie["Poster"]
             })
+            
+    while len(recommended_movies) < 30:
+        for title in random_movies:
+            response = requests.get(f"http://www.omdbapi.com/?apikey={OMDB_API_KEY}&t={title}")
+            if response.status_code == 200:
+                movie = response.json()
+
+                # Eğer başlık veya poster bilgisi eksikse, filmi atla
+                if not movie.get("Title") or not movie.get("Poster"):
+                    continue
+
+                # Poster verisinin yüklenip yüklenmediğini kontrol et
+                recommended_movies.append({
+                    "title": movie["Title"],
+                    "poster": movie["Poster"]
+                })
+
+            if len(recommended_movies) == 30:
+                break
 
     return recommended_movies
 
@@ -112,16 +131,19 @@ def home():
     recommended_movies = get_random_movies()
     return render_template("dashboard.html", recommended_movies=recommended_movies)
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    username = request.form['username']
-    password = request.form['password']
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        
+        if login_user(username, password):
+            session['user'] = username  # Kullanıcıyı session'a ekle
+            return redirect(url_for('dashboard'))
+        else:
+            return "Giriş başarısız! Kullanıcı adı veya şifre yanlış."
     
-    if login_user(username, password):
-        session['user'] = username  # Kullanıcıyı session'a ekle
-        return redirect(url_for('dashboard'))
-    else:
-        return "Giriş başarısız! Kullanıcı adı veya şifre yanlış."
+    return render_template("login.html")
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -147,7 +169,7 @@ def dashboard():
 @app.route('/logout')
 def logout():
     session.pop('user', None)  # Kullanıcıyı session'dan çıkar
-    return redirect(url_for('home'))  # Login sayfasına yönlendir
+    return redirect(url_for('login'))  # Login sayfasına yönlendir
 
 @app.route('/profile')
 def profile():

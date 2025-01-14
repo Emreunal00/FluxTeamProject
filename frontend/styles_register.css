@@ -5,6 +5,7 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "Quicksand", sans-serif;
+  color: #FFFFFF; /* Beyaz metin */
 }
 
 body {
@@ -133,6 +134,15 @@ body {
 .login .inputBx input[type="submit"]:hover {
   background: linear-gradient(45deg, #3498DB, #2980B9);
   filter: drop-shadow(0 0 25px #3498DB) drop-shadow(0 0 50px #3498DB); /* Glowing neon effect */
+}
+
+.login p a {
+  color: #3498DB; /* Mavi renk */
+  text-decoration: none; /* Alt çizgi olmadan */
+}
+
+.login p a:hover {
+  text-decoration: underline; /* Hover durumunda altını çiz */
 }
 
 .login .inputBx input::placeholder {
