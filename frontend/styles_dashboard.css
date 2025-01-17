@@ -27,7 +27,7 @@ body {
 }
 
 .navbar .flux-btn {
-    font-size: 22px;
+    font-size: 32px;
     color: #FFFFFF;
     font-weight: bold;
     margin-left: 20px;
@@ -160,6 +160,20 @@ body {
 
 .input-group input:focus::before {
     opacity: 1;
+}
+
+.input-group input:focus {
+    animation: search-bar-glow 1s infinite alternate;
+    outline: none;
+}
+
+@keyframes search-bar-glow {
+    0% {
+        box-shadow: 0 0 10px #00FFD5, 0 0 15px #00FFD5, 0 0 20px #00FFD5;
+    }
+    100% {
+        box-shadow: 0 0 10px #002BFF, 0 0 15px #002BFF, 0 0 20px #002BFF;
+    }
 }
 
 .btn-primary {

@@ -36,7 +36,7 @@
                         type="text" 
                         name="movie_name" 
                         class="form-control" 
-                        placeholder="Enter movie name..." 
+                        placeholder="Search for a movie..." 
                         required>
                     <button type="submit" class="btn btn-primary">Search</button>
                 </div>
@@ -45,7 +45,7 @@
 
         <!-- Movie Recommendations -->
         <div class="recommendations-container">
-            <h3>You Might Like</h3>
+            <h3>You Might Also Like</h3>
             <!-- Movie Cards Container -->
             <div class="movie-container">
                 {% for movie in recommended_movies %}

@@ -8,6 +8,12 @@ users:
 - email: eren.ergani9@gmail.com
   password: '002345'
   username: eren
+- email: egeduyar@outlook.com
+  password: 'ege123'
+  username: ege
+- email: barankrmn@gmail.com
+  password: 'baran123'
+  username: baran
 - email: user3@example.com
   password: 123123123
   username: user3
