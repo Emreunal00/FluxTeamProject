@@ -277,13 +277,13 @@ body {
 }
 
 .movie-container {
-    display: flex; /* Use flexbox for side-by-side layout */
-    flex-wrap: wrap; /* Allow wrapping to the next line */
-    gap: 20px; /* Space between cards */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
     padding: 20px;
-    max-width: 100%; /* Adjust the maximum width */
-    margin: 0; /* Remove auto margin */
-    margin-left: 20px; /* Align to the left */
+    max-width: 100%;
+    margin: 0; 
+    margin-left: 20px;
 }
 
 .movie-card-container {
@@ -305,7 +305,7 @@ body {
     overflow: hidden;
     text-align: center;
     width: 100%;
-    max-width: 300px; /* Ensure card width matches container */
+    max-width: 300px;
     transition: border 0.3s ease;
 }
 
