@@ -10,6 +10,7 @@ from models.user import User
 from models.favorite import Favorite
 from models.watched import Watched
 from models.watchlist import Watchlist
+from models.rating import Rating
 
 app = Flask(__name__, static_folder='frontend')
 app.secret_key = "your_secret_key"
@@ -22,9 +23,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///your_database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
-
-with app.app_context():
-    db.create_all()
 
 def load_users():
     with open("users.yaml", "r") as file:
@@ -82,7 +80,7 @@ def get_random_movies():
         with open("movies.txt", "r") as file:
             movie_titles = [line.strip() for line in file if line.strip()]
     except FileNotFoundError:
-        print("movies.txt dosyası bulunamadı! Lütfen dosyayı oluşturun ve film isimlerini ekleyin.")
+        print("movies.txt file not found! Please create the file and add movie titles.")
         return []
     random_movies = random.sample(movie_titles, min(len(movie_titles), 30))
     recommended_movies = []
@@ -128,7 +126,7 @@ def login():
             session['user'] = username
             return redirect(url_for('dashboard'))
         else:
-            error_message = "Giriş başarısız! Kullanıcı adı veya şifre yanlış."
+            error_message = "Login failed! Incorrect username or password."
     return render_template("login.html", error_message=error_message)
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -141,7 +139,7 @@ def register():
         if register_user(username, email, password):
             return redirect(url_for('dashboard'))
         else:
-            error_message = "Kullanıcı adı veya e-posta zaten kayıtlı."
+            error_message = "Username or email already registered."
     return render_template("register.html", error_message=error_message)
 
 @app.route('/dashboard')
@@ -171,7 +169,7 @@ def profile():
             user_email=user_info['email'],
             user_profile_image=profile_images.get(username, 'default_image.png')
         )
-    return "Kullanıcı bilgileri bulunamadı!"
+    return "User information not found!"
 
 @app.route('/update_profile', methods=['POST'])
 def update_profile():
@@ -197,7 +195,7 @@ def update_profile():
             save_profile_images(profile_images)
         return redirect(url_for('profile'))
     else:
-        return "Kullanıcı bilgileri güncellenemedi!"
+        return "User information could not be updated!"
 
 @app.route('/update_profile_image', methods=['POST'])
 def update_profile_image():
@@ -215,7 +213,7 @@ def update_profile_image():
         save_profile_images(profile_images)
         return redirect(url_for('profile'))
     else:
-        return "Geçersiz dosya formatı!"
+        return "Invalid file format!"
 
 @app.route('/movies', methods=['GET', 'POST'])
 def movies():
@@ -228,7 +226,7 @@ def movies():
             if response.status_code == 200:
                 return jsonify(response.json())
             else:
-                return jsonify({"error": "Film bilgileri alınamadı."}), 500
+                return jsonify({"error": "Movie information could not be retrieved."}), 500
     movie_data = []
     error_message = None
     if request.method == 'POST':
@@ -245,15 +243,15 @@ def movies():
                             movie_details = detail_response.json()
                             movie_data.append(movie_details)
             else:
-                error_message = "Aradığınız filme dair sonuç bulunamadı."
+                error_message = "No results found for the movie you searched for."
         else:
-            error_message = "Film verisi alınamadı. Lütfen tekrar deneyin."
+            error_message = "Movie data could not be retrieved. Please try again."
     return render_template('movies.html', movie_data=movie_data, error_message=error_message)
 
 @app.route('/add_to_favorites', methods=['POST'])
 def add_to_favorites():
     if 'user' not in session:
-        return jsonify(success=False, message="Oturum açmanız gerekiyor."), 401
+        return jsonify(success=False, message="You need to log in."), 401
     username = session['user']
     movie_data = request.json.get('movie_data')
     print(f"Received movie_data: {movie_data}")
@@ -261,7 +259,7 @@ def add_to_favorites():
         movie_dict = json.loads(movie_data)
     except json.JSONDecodeError as e:
         print(f"JSONDecodeError: {str(e)}")
-        return jsonify(success=False, message=f"Geçersiz JSON verisi: {str(e)}"), 400
+        return jsonify(success=False, message=f"Invalid JSON data: {str(e)}"), 400
     existing_favorite = Favorite.query.filter_by(username=username, imdb_id=movie_dict['imdbID']).first()
     if not existing_favorite:
         new_favorite = Favorite(
@@ -278,9 +276,9 @@ def add_to_favorites():
         )
         db.session.add(new_favorite)
         db.session.commit()
-        return jsonify(success=True, message="Film favorilere eklendi.")
+        return jsonify(success=True, message="Movie added to favorites.")
     else:
-        return jsonify(success=False, message="Film zaten favorilerinizde.")
+        return jsonify(success=False, message="Movie is already in your favorites.")
 
 @app.route('/favorites')
 def favorites():
@@ -303,9 +301,9 @@ def change_password():
         if update_user_info(username, new_password=new_password):
             return redirect(url_for('profile'))
         else:
-            return "Şifre güncellenemedi!"
+            return "Password could not be updated!"
     else:
-        return "Mevcut şifre yanlış!"
+        return "Current password is incorrect!"
 
 @app.route('/change_username', methods=['POST'])
 def change_username():
@@ -317,7 +315,7 @@ def change_username():
         session['user'] = new_username
         return redirect(url_for('profile'))
     else:
-        return "Kullanıcı adı güncellenemedi!"
+        return "Username could not be updated!"
 
 @app.route('/movie_details')
 def movie_details():
@@ -326,34 +324,34 @@ def movie_details():
     if response.status_code == 200:
         return jsonify(response.json())
     else:
-        return jsonify({"error": "Film bilgileri alınamadı."}), 500
+        return jsonify({"error": "Movie information could not be retrieved."}), 500
 
 @app.route('/remove_from_favorites', methods=['POST'])
 def remove_from_favorites():
     data = request.get_json()
     title = data.get('title')
     if not title:
-        return jsonify({'success': False, 'message': 'Film başlığı belirtilmedi.'}), 400
+        return jsonify({'success': False, 'message': 'Movie title not specified.'}), 400
     try:
         remove_movie_from_favorites(title)
-        return jsonify({'success': True, 'message': 'Film favorilerden çıkarıldı.'})
+        return jsonify({'success': True, 'message': 'Movie removed from favorites.'})
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 500
 
 def remove_movie_from_favorites(title):
     username = session.get('user')
     if not username:
-        raise Exception('Kullanıcı oturumu bulunamadı.')
+        raise Exception('User session not found.')
     favorite = Favorite.query.filter_by(username=username, title=title).first()
     if not favorite:
-        raise Exception('Film favorilerde bulunamadı.')
+        raise Exception('Movie not found in favorites.')
     db.session.delete(favorite)
     db.session.commit()
 
 @app.route('/add_to_watched', methods=['POST'])
 def add_to_watched():
     if 'user' not in session:
-        return jsonify(success=False, message="Oturum açmanız gerekiyor."), 401
+        return jsonify(success=False, message="You need to log in."), 401
     username = session['user']
     movie_data = request.json.get('movie_data')
     print(f"Received movie_data: {movie_data}")
@@ -361,7 +359,7 @@ def add_to_watched():
         movie_dict = json.loads(movie_data)
     except json.JSONDecodeError as e:
         print(f"JSONDecodeError: {str(e)}")
-        return jsonify(success=False, message=f"Geçersiz JSON verisi: {str(e)}"), 400
+        return jsonify(success=False, message=f"Invalid JSON data: {str(e)}"), 400
     existing_watched = Watched.query.filter_by(username=username, imdb_id=movie_dict['imdbID']).first()
     if not existing_watched:
         new_watched = Watched(
@@ -378,9 +376,9 @@ def add_to_watched():
         )
         db.session.add(new_watched)
         db.session.commit()
-        return jsonify(success=True, message="Film izlenenlere eklendi.")
+        return jsonify(success=True, message="Movie added to watched.")
     else:
-        return jsonify(success=False, message="Film zaten izlenenler listenizde.")
+        return jsonify(success=False, message="Movie is already in your watched list.")
 
 @app.route('/watched')
 def watched():
@@ -395,37 +393,37 @@ def remove_from_watched():
     data = request.get_json()
     title = data.get('title')
     if not title:
-        return jsonify({'success': False, 'message': 'Film başlığı belirtilmedi.'}), 400
+        return jsonify({'success': False, 'message': 'Movie title not specified.'}), 400
     try:
         remove_movie_from_watched(title)
-        return jsonify({'success': True, 'message': 'Film izlenenlerden çıkarıldı.'})
+        return jsonify({'success': True, 'message': 'Movie removed from watched.'})
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 500
 
 def remove_movie_from_watched(title):
     username = session.get('user')
     if not username:
-        raise Exception('Kullanıcı oturumu bulunamadı.')
+        raise Exception('User session not found.')
     watched = Watched.query.filter_by(username=username, title=title).first()
     if not watched:
-        raise Exception('Film izlenenlerde bulunamadı.')
+        raise Exception('Movie not found in watched.')
     db.session.delete(watched)
     db.session.commit()
 
 def remove_movie_watched(title):
     username = session.get('user')
     if not username:
-        raise Exception('Kullanıcı oturumu bulunamadı.')
+        raise Exception('User session not found.')
     watched = Watched.query.filter_by(username=username, title=title).first()
     if not watched:
-        raise Exception('Film izlenenlerde bulunamadı.')
+        raise Exception('Movie not found in watched.')
     db.session.delete(watched)
     db.session.commit()
 
 @app.route('/add_to_watchlist', methods=['POST'])
 def add_to_watchlist():
     if 'user' not in session:
-        return jsonify(success=False, message="Oturum açmanız gerekiyor."), 401
+        return jsonify(success=False, message="You need to log in."), 401
     username = session['user']
     movie_data = request.json.get('movie_data')
     print(f"Received movie_data: {movie_data}")
@@ -433,7 +431,7 @@ def add_to_watchlist():
         movie_dict = json.loads(movie_data)
     except json.JSONDecodeError as e:
         print(f"JSONDecodeError: {str(e)}")
-        return jsonify(success=False, message=f"Geçersiz JSON verisi: {str(e)}"), 400
+        return jsonify(success=False, message=f"Invalid JSON data: {str(e)}"), 400
     existing_watchlist = Watchlist.query.filter_by(username=username, imdb_id=movie_dict['imdbID']).first()
     if not existing_watchlist:
         new_watchlist = Watchlist(
@@ -450,9 +448,9 @@ def add_to_watchlist():
         )
         db.session.add(new_watchlist)
         db.session.commit()
-        return jsonify(success=True, message="Film izleme listesine eklendi.")
+        return jsonify(success=True, message="Movie added to watchlist.")
     else:
-        return jsonify(success=False, message="Film zaten izleme listenizde.")
+        return jsonify(success=False, message="Movie is already in your watchlist.")
 
 @app.route('/watchlist')
 def watchlist():
@@ -467,32 +465,137 @@ def remove_from_watchlist():
     data = request.get_json()
     title = data.get('title')
     if not title:
-        return jsonify({'success': False, 'message': 'Film başlığı belirtilmedi.'}), 400
+        return jsonify({'success': False, 'message': 'Movie title not specified.'}), 400
     try:
         remove_movie_from_watchlist(title)
-        return jsonify({'success': True, 'message': 'Film izleme listesinden çıkarıldı.'})
+        return jsonify({'success': True, 'message': 'Movie removed from watchlist.'})
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 500
 
 def remove_movie_from_watchlist(title):
     username = session.get('user')
     if not username:
-        raise Exception('Kullanıcı oturumu bulunamadı.')
+        raise Exception('User session not found.')
     watchlist = Watchlist.query.filter_by(username=username, title=title).first()
     if not watchlist:
-        raise Exception('Film izleme listesinde bulunamadı.')
+        raise Exception('Movie not found in watchlist.')
     db.session.delete(watchlist)
     db.session.commit()
 
 def remove_movie_watchlist(title):
     username = session.get('user')
     if not username:
-        raise Exception('Kullanıcı oturumu bulunamadı.')
+        raise Exception('User session not found.')
     watchlist = Watchlist.query.filter_by(username=username, title=title).first()
     if not watchlist:
-        raise Exception('Film izleme listesinde bulunamadı.')
+        raise Exception('Movie not found in watchlist.')
     db.session.delete(watchlist)
     db.session.commit()
+
+@app.route('/add_to_rating', methods=['POST'])
+def add_to_rating():
+    if 'user' not in session:
+        return jsonify(success=False, message="You need to log in."), 401
+    username = session['user']
+    movie_data = request.json.get('movie_data')
+    print(f"Received movie_data: {movie_data}")
+    try:
+        movie_dict = json.loads(movie_data)
+    except json.JSONDecodeError as e:
+        print(f"JSONDecodeError: {str(e)}")
+        return jsonify(success=False, message=f"Invalid JSON data: {str(e)}"), 400
+    existing_rating = Rating.query.filter_by(username=username, imdb_id=movie_dict['imdbID']).first()
+    if not existing_rating:
+        new_rating = Rating(
+            username=username,
+            imdb_id=movie_dict['imdbID'],
+            title=movie_dict['Title'],
+            year=movie_dict['Year'],
+            genre=movie_dict['Genre'],
+            director=movie_dict['Director'],
+            actors=movie_dict['Actors'],
+            plot=movie_dict['Plot'],
+            poster=movie_dict['Poster'],
+            imdb_rating=movie_dict['imdbRating']
+        )
+        db.session.add(new_rating)
+        db.session.commit()
+        return jsonify(success=True, message="Movie rated.")
+    else:
+        return jsonify(success=False, message="Movie already rated.")
+
+@app.route('/rating')
+def rating():
+    if 'user' not in session:
+        return redirect(url_for('home'))
+    username = session['user']
+    rating_movies = Rating.query.filter_by(username=username).all()
+    return render_template('rating.html', rating_movies=rating_movies)
+
+@app.route('/remove_from_rating', methods=['POST'])
+def remove_from_rating():
+    data = request.get_json()
+    title = data.get('title')
+    if not title:
+        return jsonify({'success': False, 'message': 'Movie title not specified.'}), 400
+    try:
+        remove_movie_from_rating(title)
+        return jsonify({'success': True, 'message': 'Movie removed from rating list.'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 500
+
+def remove_movie_from_rating(title):
+    username = session.get('user')
+    if not username:
+        raise Exception('User session not found.')
+    rating = Rating.query.filter_by(username=username, title=title).first()
+    if not rating:
+        raise Exception('Movie not found in rating list.')
+    db.session.delete(rating)
+    db.session.commit()
+
+def remove_movie_rating(title):
+    username = session.get('user')
+    if not username:
+        raise Exception('User session not found.')
+    rating = Rating.query.filter_by(username=username, title=title).first()
+    if not rating:
+        raise Exception('Movie not found in rating list.')
+    db.session.delete(rating)
+    db.session.commit()
+
+@app.route('/rate_movie', methods=['POST'])
+def rate_movie():
+    if 'user' not in session:
+        return jsonify(success=False, message="You need to log in."), 401
+    data = request.get_json()
+    movie_data = data.get('movie_data')
+    rating_value = data.get('rating')
+    try:
+        movie_dict = json.loads(movie_data)
+    except json.JSONDecodeError as e:
+        return jsonify(success=False, message=f"Invalid JSON data: {str(e)}"), 400
+    existing_rating = Rating.query.filter_by(username=session['user'], imdb_id=movie_dict['imdbID']).first()
+    if not existing_rating:
+        new_rating = Rating(
+            username=session['user'],
+            imdb_id=movie_dict['imdbID'],
+            title=movie_dict['Title'],
+            year=movie_dict['Year'],
+            genre=movie_dict['Genre'],
+            director=movie_dict['Director'],
+            actors=movie_dict['Actors'],
+            plot=movie_dict['Plot'],
+            poster=movie_dict['Poster'],
+            imdb_rating=movie_dict['imdbRating']
+        )
+        db.session.add(new_rating)
+        db.session.commit()
+        return jsonify(success=True, message="Movie rated.")
+    else:
+        existing_rating.imdb_rating = rating_value
+        db.session.commit()
+        return jsonify(success=True, message="Movie rating updated.")
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,45 +1,45 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giriş Yap</title>
+    <title>Login</title>
     <link rel="stylesheet" href="../frontend/styles_login.css">
 </head>
 <body>
 
-<!-- Ring animasyonlu kısımlar -->
+<!-- Ring animation sections -->
 <div class="ring">
   <i style="--clr:#00ff0a;"></i>
   <i style="--clr:#ff0057;"></i>
   <i style="--clr:#fffd44;"></i>
   
   <div class="login">
-    <h2>Giriş Yap</h2>
+    <h2>Login</h2>
     <form action="/login" method="POST">
       <div class="inputBx">
-        <input type="text" name="username" required placeholder="Kullanıcı Adı">
+        <input type="text" name="username" required placeholder="Username">
       </div>
       <div class="inputBx">
-        <input type="password" name="password" required placeholder="Şifre">
+        <input type="password" name="password" required placeholder="Password">
       </div>
       <div class="inputBx">
-        <input type="submit" value="Giriş Yap">
+        <input type="submit" value="Login">
       </div>
     </form>
     
-    <!-- Hesabınız yok mu? Kayıt Ol kısmı -->
-    <p>Hesabınız yok mu? <a href="/register">Kayıt Ol</a></p>
+    <!-- Don't have an account? Register section -->
+    <p>Don't have an account? <a href="/register">Register</a></p>
   </div>
 </div>
 
 <div id="error-popup" class="error-popup" style="display: none;">
-    <p>Giriş başarısız! Kullanıcı adı veya şifre yanlış.</p>
-    <button id="close-popup" class="btn-close">Kapat</button>
+    <p>Login failed! Incorrect username or password.</p>
+    <button id="close-popup" class="btn-close">Close</button>
 </div>
 
-<!-- JavaScript kodları burada -->
+<!-- JavaScript code here -->
 <script>
     const errorPopup = document.getElementById("error-popup");
     const closePopup = document.getElementById("close-popup");
