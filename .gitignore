@@ -118,3 +118,4 @@ dmypy.json
 # Custom
 frontend/uploads/
 users.yaml
+profile_pics.yaml
