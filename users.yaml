@@ -9,10 +9,10 @@ users:
   password: '002345'
   username: eren
 - email: egeduyar@outlook.com
-  password: 'ege123'
+  password: ege123
   username: ege
 - email: barankrmn@gmail.com
-  password: 'baran123'
+  password: baran123
   username: baran
 - email: user3@example.com
   password: 123123123
@@ -23,3 +23,6 @@ users:
 - email: umutemre2004@gmail.com
   password: Emre2004
   username: "Emre \xDCnal"
+- email: aaaa@gmail.com
+  password: aaa
+  username: aaaa
