@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>İzleme Listesi</title>
+    <title>FLUX</title>
     <link rel="stylesheet" href="../frontend/styles_watchlist.css">
 </head>
 <body>
@@ -12,26 +12,26 @@
     <div class="navbar">
         <a href="/dashboard" class="flux-btn">FLUX</a>
         <div class="profile-container">
-            <button class="profile-btn">Profil</button>
+            <button class="profile-btn">Profile</button>
             <div class="dropdown-menu">
-                <a href="/profile" class="dropdown-item">Profili Düzenle</a>
-                <a href="/favorites" class="dropdown-item">Favoriler</a>
-                <a href="/watched" class="dropdown-item">İzlediklerim</a>
-                <a href="/watchlist" class="dropdown-item">İzleme Listesi</a>
-                <a href="/ratings" class="dropdown-item">Puanlarım</a>
+                <a href="/profile" class="dropdown-item">Edit Profile</a>
+                <a href="/favorites" class="dropdown-item">Favorites</a>
+                <a href="/watched" class="dropdown-item">Watched</a>
+                <a href="/watchlist" class="dropdown-item">Watchlist</a>
+                <a href="/rating" class="dropdown-item">My Ratings</a>
             </div>
         </div>
-        <a href="/logout" class="logout-btn">Çıkış Yap</a>
+        <a href="/logout" class="logout-btn">Logout</a>
     </div>
     
     <div class="dashboard-container">
-        <h2 style="text-align: center;">İzleme Listesi</h2>
+        <h2 style="text-align: center;">Watchlist</h2>
         <div class="movie-container">
             {% for movie in watchlist_movies %}
                 <div class="movie-card" data-title="{{ movie.title }}">
-                    <img src="{{ movie.poster or 'https://via.placeholder.com/300x450?text=No+Image' }}" alt="Film Posteri">
+                    <img src="{{ movie.poster or 'https://via.placeholder.com/300x450?text=No+Image' }}" alt="Movie Poster">
                     <h3>{{ movie.title }}</h3>
-                    <p>{{ movie.year or 'Bilinmiyor' }}</p>
+                    <p>{{ movie.year or 'Unknown' }}</p>
                 </div>
             {% endfor %}
         </div>
@@ -40,15 +40,15 @@
     <div id="movie-popup" class="movie-popup" style="display: none;">
         <div class="popup-content">
             <span id="close-popup" class="close-popup">&times;</span>
-            <img id="popup-poster" src="" alt="Film Posteri">
+            <img id="popup-poster" src="" alt="Movie Poster">
             <h3 id="popup-title"></h3>
-            <p id="popup-plot"><strong>Konu:</strong> </p>
-            <p id="popup-year"><strong>Yıl:</strong> </p>
-            <p id="popup-genre"><strong>Tür:</strong> </p>
-            <p id="popup-director"><strong>Yönetmen:</strong> </p>
-            <p id="popup-actors"><strong>Oyuncular:</strong> </p>
-            <p id="popup-imdb"><strong>IMDb Puanı:</strong> </p>
-            <button id="remove-from-watchlist" class="btn btn-primary">İzleme Listesinden Kaldır</button>
+            <p id="popup-plot"><strong>Plot:</strong> </p>
+            <p id="popup-year"><strong>Year:</strong> </p>
+            <p id="popup-genre"><strong>Genre:</strong> </p>
+            <p id="popup-director"><strong>Director:</strong> </p>
+            <p id="popup-actors"><strong>Actors:</strong> </p>
+            <p id="popup-imdb"><strong>IMDb Rating:</strong> </p>
+            <button id="remove-from-watchlist" class="btn btn-primary">Remove from Watchlist</button>
         </div>
     </div>
 
@@ -77,12 +77,12 @@
                     .then(data => {
                         popupTitle.textContent = data.Title;
                         popupPoster.src = data.Poster;
-                        popupPlot.innerHTML = `<strong>Konu:</strong> ${data.Plot}`;
-                        popupYear.innerHTML = `<strong>Yıl:</strong> ${data.Year}`;
-                        popupGenre.innerHTML = `<strong>Tür:</strong> ${data.Genre}`;
-                        popupDirector.innerHTML = `<strong>Yönetmen:</strong> ${data.Director}`;
-                        popupActors.innerHTML = `<strong>Oyuncular:</strong> ${data.Actors}`;
-                        popupImdb.innerHTML = `<strong>IMDb Puanı:</strong> ${data.imdbRating}`;
+                        popupPlot.innerHTML = `<strong>Plot:</strong> ${data.Plot}`;
+                        popupYear.innerHTML = `<strong>Year:</strong> ${data.Year}`;
+                        popupGenre.innerHTML = `<strong>Genre:</strong> ${data.Genre}`;
+                        popupDirector.innerHTML = `<strong>Director:</strong> ${data.Director}`;
+                        popupActors.innerHTML = `<strong>Actors:</strong> ${data.Actors}`;
+                        popupImdb.innerHTML = `<strong>IMDb Rating:</strong> ${data.imdbRating}`;
 
                         moviePopup.style.display = 'block';
                     });
@@ -120,7 +120,7 @@
                 }
             })
             .catch(error => {
-                alert('İzleme listesinden çıkarılırken bir hata oluştu.');
+                alert('An error occurred while removing from the watchlist.');
                 console.error('Error:', error);
             });
         });

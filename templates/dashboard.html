@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FLUX</title>
-    <!-- CSS Bağlantısı -->
+    <!-- CSS Link -->
     <link rel="stylesheet" href="../frontend/styles_dashboard.css">
 </head>
 <body>
@@ -13,22 +13,22 @@
     <div class="navbar">
         <a href="/dashboard" class="flux-btn">FLUX</a>
         <div class="profile-container">
-            <button class="profile-btn">Profil</button>
+            <button class="profile-btn">Profile</button>
             <div class="dropdown-menu">
-                <a href="/profile" class="dropdown-item">Profili Düzenle</a>
-                <a href="/favorites" class="dropdown-item">Favoriler</a>
-                <a href="/watched" class="dropdown-item">İzlediklerim</a>
-                <a href="/watchlist" class="dropdown-item">İzleme Listesi</a>
-                <a href="/ratings" class="dropdown-item">Puanlarım</a>
+                <a href="/profile" class="dropdown-item">Edit Profile</a>
+                <a href="/favorites" class="dropdown-item">Favorites</a>
+                <a href="/watched" class="dropdown-item">Watched</a>
+                <a href="/watchlist" class="dropdown-item">Watchlist</a>
+                <a href="/rating" class="dropdown-item">My Ratings</a>
             </div>
         </div>
-        <a href="/logout" class="logout-btn">Çıkış Yap</a>
+        <a href="/logout" class="logout-btn">Logout</a>
     </div>
     
     <!-- Dashboard Container -->
     <div class="dashboard-container">
         <h2 style="text-align: center;">Flux Movie Database</h2>
-        <!-- Arama Formu -->
+        <!-- Search Form -->
         <div class="button-container">
             <form method="POST" action="/movies" class="mb-4">
                 <div class="input-group">
@@ -36,21 +36,21 @@
                         type="text" 
                         name="movie_name" 
                         class="form-control" 
-                        placeholder="Film adını giriniz..." 
+                        placeholder="Enter movie name..." 
                         required>
-                    <button type="submit" class="btn btn-primary">Ara</button>
+                    <button type="submit" class="btn btn-primary">Search</button>
                 </div>
             </form>
         </div>
 
-        <!-- Film Önerileri -->
+        <!-- Movie Recommendations -->
         <div class="recommendations-container">
-            <h3>İlginizi Çekebilir</h3>
-            <!-- Film Kartları Konteyneri -->
+            <h3>You Might Like</h3>
+            <!-- Movie Cards Container -->
             <div class="movie-container">
                 {% for movie in recommended_movies %}
                     <div class="movie-card" data-title="{{ movie.title }}">
-                        <img src="{{ movie.poster }}" alt="Film Posteri">
+                        <img src="{{ movie.poster }}" alt="Movie Poster">
                         <h3>{{ movie.title }}</h3>
                         <p>{{ movie.year }}</p>
                     </div>
@@ -62,17 +62,17 @@
     <div id="movie-popup" class="movie-popup" style="display: none;">
         <div class="popup-content">
             <span id="close-popup" class="close-popup">&times;</span>
-            <img id="popup-poster" src="" alt="Film Posteri">
+            <img id="popup-poster" src="" alt="Movie Poster">
             <h3 id="popup-title"></h3>
-            <p id="popup-plot"><strong>Konu:</strong> </p>
-            <p id="popup-year"><strong>Yıl:</strong> </p>
-            <p id="popup-genre"><strong>Tür:</strong> </p>
-            <p id="popup-director"><strong>Yönetmen:</strong> </p>
-            <p id="popup-actors"><strong>Oyuncular:</strong> </p>
-            <p id="popup-imdb"><strong>IMDb Puanı:</strong> </p>
-            <button id="add-to-favorites" class="btn btn-primary">Favorilere Ekle</button>
-            <button id="add-to-watched" class="btn btn-primary">İzlenenlere Ekle</button>
-            <button id="add-to-watchlist" class="btn btn-primary">İzleme Listesine Ekle</button>
+            <p id="popup-plot"><strong>Plot:</strong> </p>
+            <p id="popup-year"><strong>Year:</strong> </p>
+            <p id="popup-genre"><strong>Genre:</strong> </p>
+            <p id="popup-director"><strong>Director:</strong> </p>
+            <p id="popup-actors"><strong>Actors:</strong> </p>
+            <p id="popup-imdb"><strong>IMDb Rating:</strong> </p>
+            <button id="add-to-favorites" class="btn btn-primary">Add to Favorites</button>
+            <button id="add-to-watched" class="btn btn-primary">Add to Watched</button>
+            <button id="add-to-watchlist" class="btn btn-primary">Add to Watchlist</button>
         </div>
     </div>
 
@@ -103,12 +103,12 @@
                         currentMovieData = data;
                         popupTitle.textContent = data.Title;
                         popupPoster.src = data.Poster;
-                        popupPlot.innerHTML = `<strong>Konu:</strong> ${data.Plot}`;
-                        popupYear.innerHTML = `<strong>Yıl:</strong> ${data.Year}`;
-                        popupGenre.innerHTML = `<strong>Tür:</strong> ${data.Genre}`;
-                        popupDirector.innerHTML = `<strong>Yönetmen:</strong> ${data.Director}`;
-                        popupActors.innerHTML = `<strong>Oyuncular:</strong> ${data.Actors}`;
-                        popupImdb.innerHTML = `<strong>IMDb Puanı:</strong> ${data.imdbRating}`;
+                        popupPlot.innerHTML = `<strong>Plot:</strong> ${data.Plot}`;
+                        popupYear.innerHTML = `<strong>Year:</strong> ${data.Year}`;
+                        popupGenre.innerHTML = `<strong>Genre:</strong> ${data.Genre}`;
+                        popupDirector.innerHTML = `<strong>Director:</strong> ${data.Director}`;
+                        popupActors.innerHTML = `<strong>Actors:</strong> ${data.Actors}`;
+                        popupImdb.innerHTML = `<strong>IMDb Rating:</strong> ${data.imdbRating}`;
 
                         moviePopup.style.display = 'block';
                     });
@@ -136,7 +136,7 @@
                 alert(data.message);
             })
             .catch(error => {
-                alert('Favorilere eklenirken bir hata oluştu.');
+                alert('An error occurred while adding to favorites.');
                 console.error('Error:', error);
             });
         });
@@ -152,7 +152,7 @@
                 alert(data.message);
             })
             .catch(error => {
-                alert('İzlenenlere eklenirken bir hata oluştu.');
+                alert('An error occurred while adding to watched.');
                 console.error('Error:', error);
             });
         });
@@ -168,7 +168,22 @@
                 alert(data.message);
             })
             .catch(error => {
-                alert('İzleme listesine eklenirken bir hata oluştu.');
+                alert('An error occurred while adding to watchlist.');
+                console.error('Error:', error);
+            });
+        });
+        addToWatchlist.addEventListener('click', () => {
+            fetch('/add_to_rating', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ movie_data: JSON.stringify(currentMovieData) })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => {
+                alert('An error occurred while adding to rating list.');
                 console.error('Error:', error);
             });
         });

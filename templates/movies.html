@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FLUX Dashboard</title>
-    <!-- CSS Bağlantısı -->
+    <title>FLUX</title>
+    <!-- CSS Link -->
     <link rel="stylesheet" href="../frontend/styles_movie.css">
     <style>
         .star {
@@ -23,23 +23,23 @@
     <div class="navbar">
         <a href="/dashboard" class="flux-btn">FLUX</a>
         <div class="profile-container">
-            <button class="profile-btn">Profil</button>
+            <button class="profile-btn">Profile</button>
             <div class="dropdown-menu">
-                <a href="/profile" class="dropdown-item">Profili Düzenle</a>
-                <a href="/favorites" class="dropdown-item">Favoriler</a>
-                <a href="/watched" class="dropdown-item">İzlediklerim</a>
-                <a href="/watchlist" class="dropdown-item">İzleme Listesi</a>
-                <a href="/ratings" class="dropdown-item">Puanlarım</a>
+                <a href="/profile" class="dropdown-item">Edit Profile</a>
+                <a href="/favorites" class="dropdown-item">Favorites</a>
+                <a href="/watched" class="dropdown-item">Watched</a>
+                <a href="/watchlist" class="dropdown-item">Watchlist</a>
+                <a href="/rating" class="dropdown-item">My Ratings</a>
             </div>
         </div>
-        <a href="/logout" class="logout-btn">Çıkış Yap</a>
+        <a href="/logout" class="logout-btn">Logout</a>
     </div>
     
     <!-- Dashboard Container -->
     <div class="dashboard-container">
-        <h2 style="text-align: center;">Arama Sonuçları</h2>
+        <h2 style="text-align: center;">Search Results</h2>
         
-        <!-- Arama Formu -->
+        <!-- Search Form -->
         <div class="button-container">
             <form method="POST" action="/movies" class="mb-4">
                 <div class="input-group">
@@ -47,21 +47,21 @@
                         type="text" 
                         name="movie_name" 
                         class="form-control" 
-                        placeholder="Film adını giriniz..." 
+                        placeholder="Enter movie name..." 
                         required>
-                    <button type="submit" class="btn btn-primary">Ara</button>
+                    <button type="submit" class="btn btn-primary">Search</button>
                 </div>
             </form>
         </div>
 
-        <!-- Hata Mesajı -->
+        <!-- Error Message -->
         {% if error_message %}
             <div class="alert alert-danger text-center" role="alert">
                 {{ error_message }}
             </div>
         {% endif %}
         
-        <!-- Benzer Filmler -->
+        <!-- Similar Movies -->
         {% if movie_data %}
             <div class="row movie-container">
                 {% for movie in movie_data %}
@@ -70,23 +70,23 @@
                             <img 
                                 src="{{ movie.Poster or 'https://via.placeholder.com/300x450?text=No+Image' }}" 
                                 class="card-img-top" 
-                                alt="Film Posteri">
+                                alt="Movie Poster">
                             <div class="card-body">
                                 <h5 class="card-title">{{ movie.Title }}</h5>
                                 <p class="card-text">
-                                    <strong>Yıl:</strong> {{ movie.Year or 'Bilinmiyor' }}<br>
-                                    <strong>Tür:</strong> {{ movie.Genre or 'Bilinmiyor' }}<br>
-                                    <strong>Yönetmen:</strong> {{ movie.Director or 'Bilinmiyor' }}<br>
-                                    <strong>Oyuncular:</strong> {{ movie.Actors or 'Bilinmiyor' }}<br>
-                                    <strong>IMDb Puanı:</strong> {{ movie.imdbRating or 'Bilinmiyor' }}<br>
-                                    <strong>Konu:</strong> {{ movie.Plot or 'Bilinmiyor' }}
+                                    <strong>Year:</strong> {{ movie.Year or 'Unknown' }}<br>
+                                    <strong>Genre:</strong> {{ movie.Genre or 'Unknown' }}<br>
+                                    <strong>Director:</strong> {{ movie.Director or 'Unknown' }}<br>
+                                    <strong>Actors:</strong> {{ movie.Actors or 'Unknown' }}<br>
+                                    <strong>IMDb Rating:</strong> {{ movie.imdbRating or 'Unknown' }}<br>
+                                    <strong>Plot:</strong> {{ movie.Plot or 'Unknown' }}
                                 </p>
-                                <!-- Favorilere Ekle -->
-                                <button class="btn btn-success add-to-favorites" data-movie='{{ movie | tojson }}'>Favorilere Ekle</button>
-                                <button class="btn btn-success add-to-watched" data-movie='{{ movie | tojson }}'>İzlenenlere Ekle</button>
-                                <button class="btn btn-success add-to-watchlist" data-movie='{{ movie | tojson }}'>İzleme Listesine Ekle</button>
-                                <!-- Puanlama Sistemi -->
-                                <div class="rating" data-rating="{{ movie.user_rating|default(0) }}">
+                                <!-- Add to Favorites -->
+                                <button class="btn btn-success add-to-favorites" data-movie='{{ movie | tojson }}'>Add to Favorites</button>
+                                <button class="btn btn-success add-to-watched" data-movie='{{ movie | tojson }}'>Add to Watched</button>
+                                <button class="btn btn-success add-to-watchlist" data-movie='{{ movie | tojson }}'>Add to Watchlist</button>
+                                <!-- Rating System -->
+                                <div class="rating" data-movie='{{ movie | tojson }}'>
                                     <span class="star" data-value="1">&#9733;</span>
                                     <span class="star" data-value="2">&#9733;</span>
                                     <span class="star" data-value="3">&#9733;</span>
@@ -122,14 +122,13 @@
                         }
                     })
                     .catch(error => {
-                        alert('Favorilere eklenirken bir hata oluştu.');
+                        alert('An error occurred while adding to favorites.');
                         console.error('Error:', error);
                     });
                 });
             });
         });
-    </script>
-    <script>
+
         document.addEventListener('DOMContentLoaded', function() {
             const buttons = document.querySelectorAll('.add-to-watched');
             buttons.forEach(button => {
@@ -149,14 +148,13 @@
                         }
                     })
                     .catch(error => {
-                        alert('İzlenenlere eklenirken bir hata oluştu.');
+                        alert('An error occurred while adding to watched.');
                         console.error('Error:', error);
                     });
                 });
             });
         });
-    </script>
-    <script>
+
         document.addEventListener('DOMContentLoaded', function() {
             const buttons = document.querySelectorAll('.add-to-watchlist');
             buttons.forEach(button => {
@@ -176,50 +174,45 @@
                         }
                     })
                     .catch(error => {
-                        alert('İzleme listesine eklenirken bir hata oluştu.');
+                        alert('An error occurred while adding to watchlist.');
                         console.error('Error:', error);
                     });
                 });
             });
         });
-    </script>
-    <script>
+
         document.addEventListener('DOMContentLoaded', function() {
             const stars = document.querySelectorAll('.star');
-
             stars.forEach(star => {
-                const rating = star.parentNode.getAttribute('data-rating');
-                const siblings = star.parentNode.children;
-                for (let i = 0; i < rating; i++) {
-                    siblings[i].classList.add('selected');
-                }
-
                 star.addEventListener('click', function() {
-                    const value = this.getAttribute('data-value');
-                    for (let i = 0; i < siblings.length; i++) {
-                        siblings[i].classList.remove('selected');
-                    }
-                    for (let i = 0; i < value; i++) {
-                        siblings[i].classList.add('selected');
-                    }
-                    this.parentNode.setAttribute('data-rating', value);
+                    const movieData = this.closest('.rating').getAttribute('data-movie');
+                    const ratingValue = this.getAttribute('data-value');
+                    
+                    // Update star colors
+                    const allStars = this.closest('.rating').querySelectorAll('.star');
+                    allStars.forEach(s => {
+                        if (s.getAttribute('data-value') <= ratingValue) {
+                            s.classList.add('selected');
+                        } else {
+                            s.classList.remove('selected');
+                        }
+                    });
 
-                    const movieData = this.parentNode.parentNode.querySelector('.add-to-favorites').getAttribute('data-movie');
-                    fetch('/save_rating', {
+                    fetch('/rate_movie', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ movie_data: movieData, rating: value })
+                        body: JSON.stringify({ movie_data: movieData, rating: ratingValue })
                     })
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            alert('Puan kaydedildi.');
+                            window.location.href = '/rating';
                         } else {
-                            alert('Puan kaydedilirken bir hata oluştu.');
+                            alert(data.message);
                         }
                     })
                     .catch(error => {
-                        alert('Puan kaydedilirken bir hata oluştu.');
+                        alert('An error occurred while rating the movie.');
                         console.error('Error:', error);
                     });
                 });
