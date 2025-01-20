@@ -1,6 +1,7 @@
 requirements.txt
 .DS_Store/
 
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -120,3 +121,12 @@ frontend/uploads/
 users.yaml
 profile_pics.yaml
 .DS_Store
+
+# Ignore YAML files
+*.yaml
+
+# Ignore uploads folder
+uploads/
+
+# Ignore main __pycache__ folder
+__pycache__/
