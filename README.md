@@ -23,11 +23,10 @@ To install the project, follow these steps:
 ## Usage
 To start the project, run:
 ```
-npm start
+python app.py
 ```
-Open your browser and navigate to `http://localhost:3000` to see the application in action.
 
-To start the whole project run: python app.py
+Open your browser and navigate to `[http://localhost:3000](http://127.0.0.1:5000)` to see the application in action.
 
 ## Contributing
 We welcome contributions! Please follow these steps to contribute:
@@ -37,6 +36,3 @@ We welcome contributions! Please follow these steps to contribute:
 4. Commit your changes: `git commit -m 'Add some feature'`
 5. Push to the branch: `git push origin feature-branch`
 6. Open a pull request
-
-## Contact
-For any questions or suggestions, please contact us at [your-email@example.com].
