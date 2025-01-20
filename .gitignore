@@ -119,3 +119,4 @@ dmypy.json
 frontend/uploads/
 users.yaml
 profile_pics.yaml
+.DS_Store

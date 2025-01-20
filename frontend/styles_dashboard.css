@@ -1,3 +1,4 @@
+/* General styles */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -5,6 +6,7 @@ body {
     color: #FFFFFF;
 }
 
+/* Navbar styles */
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -48,12 +50,6 @@ body {
     font-size: 16px;
 }
 
-.navbar .flux-btn {
-    font-size: 22px;
-    color: #FFFFFF;
-    font-weight: bold;
-    margin-left: 20px;
-}
 .navbar .logout-btn {
     font-size: 16px;
     color: #FFFFFF;
@@ -61,10 +57,7 @@ body {
     margin-left: 15px;
 }
 
-.navbar a:hover {
-    text-decoration: underline;
-}
-
+/* Profile dropdown menu styles */
 .profile-container {
     position: relative;
     display: inline-block;
@@ -111,6 +104,7 @@ body {
     display: block;
 }
 
+/* Search container styles */
 .search-container {
     display: flex;
     justify-content: center;
@@ -138,6 +132,7 @@ body {
     margin-right: 10px;
 }
 
+/* Button styles */
 .btn-primary {
     background-color: #2980B9;
     color: #FFFFFF;
@@ -228,6 +223,7 @@ body {
     background-color: #3498DB;
 }
 
+/* Dashboard container styles */
 .dashboard-container h2 {
     font-size: 50px;
     color: #3498DB;
@@ -243,6 +239,7 @@ body {
     padding-top: 20px;
 }
 
+/* Movie container styles */
 .movie-container {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
@@ -303,18 +300,14 @@ body {
     margin: 10px 0;
 }
 
+/* Responsive styles */
 @media (max-width: 768px) {
     .movie-container {
         grid-template-columns: 1fr;
     }
 }
 
-@keyframes glowing {
-  0% {background-position: 0 0;}
-  50% {background-position: 400% 0;}
-  100% {background-position: 0 0;}
-}
-
+/* Movie popup styles */
 .movie-popup {
     position: fixed;
     top: 50%;
@@ -367,6 +360,7 @@ body {
 .popup-content p {
     margin-bottom: 10px;
 }
+
 .movie-popup {
     backdrop-filter: blur(5px);
 }
@@ -378,4 +372,18 @@ body {
     font-size: 24px;
     cursor: pointer;
     color: white;
+}
+
+/* Add spacing between buttons in the popup */
+.popup-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+/* Adjust spacing for larger screens */
+@media (min-width: 1024px) {
+    .popup-buttons {
+        gap: 5px;
+    }
 }

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Meta tags and title -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FLUX</title>
@@ -14,6 +15,7 @@
         <div class="profile-container">
             <button class="profile-btn">Profile</button>
             <div class="dropdown-menu">
+                <!-- Profile dropdown menu -->
                 <a href="/profile" class="dropdown-item">Edit Profile</a>
                 <a href="/favorites" class="dropdown-item">Favorites</a>
                 <a href="/watched" class="dropdown-item">Watched</a>
@@ -31,6 +33,7 @@
             {% for movie in watchlist_movies %}
                 <div class="movie-card-container">
                     <div class="movie-card" data-title="{{ movie.title }}">
+                        <!-- Movie card with poster, title, and year -->
                         <img src="{{ movie.poster or 'https://via.placeholder.com/300x450?text=No+Image' }}" alt="Movie Poster">
                         <h3>{{ movie.title }}</h3>
                         <p>{{ movie.year or 'Unknown' }}</p>
@@ -70,6 +73,7 @@
         {% endif %}
     </div>
 
+    <!-- Movie popup for detailed view -->
     <div id="movie-popup" class="movie-popup" style="display: none;">
         <div class="popup-content">
             <span id="close-popup" class="close-popup">&times;</span>
@@ -86,6 +90,7 @@
     </div>
 
     <script>
+        // Add event listeners to remove rating buttons
         const removeRatingButtons = document.querySelectorAll('.remove-rating');
         removeRatingButtons.forEach(button => {
             button.addEventListener('click', () => {
@@ -118,6 +123,7 @@
             });
         });
 
+        // Add event listener to remove from watchlist button
         removeFromWatchlist.addEventListener('click', () => {
             fetch('/remove_from_watchlist', {
                 method: 'POST',

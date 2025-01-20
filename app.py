@@ -24,15 +24,18 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 
+# Load users from YAML file
 def load_users():
     with open("users.yaml", "r") as file:
         data = yaml.safe_load(file)
         return data['users']
 
+# Save users to YAML file
 def save_users(users):
     with open("users.yaml", "w") as file:
         yaml.dump({"users": users}, file)
 
+# Load profile images from YAML file
 def load_profile_images():
     if not os.path.exists("profile_pics.yaml"):
         return {}
@@ -40,10 +43,12 @@ def load_profile_images():
         data = yaml.safe_load(file)
         return data.get('profile_pics', {})
 
+# Save profile images to YAML file
 def save_profile_images(profile_images):
     with open("profile_pics.yaml", "w") as file:
         yaml.dump({"profile_pics": profile_images}, file)
 
+# Register a new user
 def register_user(username, email, password):
     users = load_users()
     for user in users:
@@ -54,6 +59,7 @@ def register_user(username, email, password):
     save_users(users)
     return True
 
+# Login a user
 def login_user(username, password):
     users = load_users()
     for user in users:
@@ -61,6 +67,7 @@ def login_user(username, password):
             return True
     return False
 
+# Update user information
 def update_user_info(username, new_username=None, new_password=None, profile_image_path=None):
     users = load_users()
     for user in users:
@@ -75,6 +82,7 @@ def update_user_info(username, new_username=None, new_password=None, profile_ima
             return True
     return False
 
+# Get random movies from a list
 def get_random_movies():
     try:
         with open("movies.txt", "r") as file:
@@ -109,13 +117,16 @@ def get_random_movies():
                 break
     return recommended_movies
 
+# Check if the file extension is allowed
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+# Route to redirect to the login page
 @app.route('/')
 def home():
     return redirect(url_for('login'))
 
+# Route to handle user login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error_message = None
@@ -129,6 +140,7 @@ def login():
             error_message = "Login failed! Incorrect username or password."
     return render_template("login.html", error_message=error_message)
 
+# Route to handle user registration
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     error_message = None
@@ -142,6 +154,7 @@ def register():
             error_message = "Username or email already registered."
     return render_template("register.html", error_message=error_message)
 
+# Route to display the dashboard
 @app.route('/dashboard')
 def dashboard():
     if 'user' not in session:
@@ -149,11 +162,13 @@ def dashboard():
     recommended_movies = get_random_movies()
     return render_template("dashboard.html", recommended_movies=recommended_movies)
 
+# Route to handle user logout
 @app.route('/logout')
 def logout():
     session.pop('user', None)
     return redirect(url_for('login'))
 
+# Route to display the user profile
 @app.route('/profile')
 def profile():
     if 'user' not in session:
@@ -171,6 +186,7 @@ def profile():
         )
     return "User information not found!"
 
+# Route to update user profile information
 @app.route('/update_profile', methods=['POST'])
 def update_profile():
     if 'user' not in session:
@@ -197,6 +213,7 @@ def update_profile():
     else:
         return "User information could not be updated!"
 
+# Route to update user profile image
 @app.route('/update_profile_image', methods=['POST'])
 def update_profile_image():
     if 'user' not in session:
@@ -215,6 +232,7 @@ def update_profile_image():
     else:
         return "Invalid file format!"
 
+# Route to search for movies and display results
 @app.route('/movies', methods=['GET', 'POST'])
 def movies():
     if 'user' not in session:
@@ -248,6 +266,7 @@ def movies():
             error_message = "Movie data could not be retrieved. Please try again."
     return render_template('movies.html', movie_data=movie_data, error_message=error_message)
 
+# Route to add a movie to the favorites list
 @app.route('/add_to_favorites', methods=['POST'])
 def add_to_favorites():
     if 'user' not in session:
@@ -280,6 +299,7 @@ def add_to_favorites():
     else:
         return jsonify(success=False, message="Movie is already in your favorites.")
 
+# Route to display the favorites list
 @app.route('/favorites')
 def favorites():
     if 'user' not in session:
@@ -288,6 +308,7 @@ def favorites():
     favorite_movies = Favorite.query.filter_by(username=username).all()
     return render_template('favorites.html', favorite_movies=favorite_movies)
 
+# Route to change user password
 @app.route('/change_password', methods=['POST'])
 def change_password():
     if 'user' not in session:
@@ -305,6 +326,7 @@ def change_password():
     else:
         return "Current password is incorrect!"
 
+# Route to change user username
 @app.route('/change_username', methods=['POST'])
 def change_username():
     if 'user' not in session:
@@ -317,6 +339,7 @@ def change_username():
     else:
         return "Username could not be updated!"
 
+# Route to get movie details by title
 @app.route('/movie_details')
 def movie_details():
     title = request.args.get('title')
@@ -326,6 +349,7 @@ def movie_details():
     else:
         return jsonify({"error": "Movie information could not be retrieved."}), 500
 
+# Route to remove a movie from the favorites list
 @app.route('/remove_from_favorites', methods=['POST'])
 def remove_from_favorites():
     data = request.get_json()
@@ -338,6 +362,7 @@ def remove_from_favorites():
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 500
 
+# Helper function to remove a movie from the favorites list
 def remove_movie_from_favorites(title):
     username = session.get('user')
     if not username:
@@ -348,6 +373,7 @@ def remove_movie_from_favorites(title):
     db.session.delete(favorite)
     db.session.commit()
 
+# Route to add a movie to the watched list
 @app.route('/add_to_watched', methods=['POST'])
 def add_to_watched():
     if 'user' not in session:
@@ -380,6 +406,7 @@ def add_to_watched():
     else:
         return jsonify(success=False, message="Movie is already in your watched list.")
 
+# Route to display the watched list
 @app.route('/watched')
 def watched():
     if 'user' not in session:
@@ -388,6 +415,7 @@ def watched():
     watched_movies = Watched.query.filter_by(username=username).all()
     return render_template('watched.html', watched_movies=watched_movies)
 
+# Route to remove a movie from the watched list
 @app.route('/remove_from_watched', methods=['POST'])
 def remove_from_watched():
     data = request.get_json()
@@ -400,6 +428,7 @@ def remove_from_watched():
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 500
 
+# Helper function to remove a movie from the watched list
 def remove_movie_from_watched(title):
     username = session.get('user')
     if not username:
@@ -410,6 +439,7 @@ def remove_movie_from_watched(title):
     db.session.delete(watched)
     db.session.commit()
 
+# Another helper function to remove a movie from the watched list (duplicate)
 def remove_movie_watched(title):
     username = session.get('user')
     if not username:
@@ -420,6 +450,7 @@ def remove_movie_watched(title):
     db.session.delete(watched)
     db.session.commit()
 
+# Route to add a movie to the watchlist
 @app.route('/add_to_watchlist', methods=['POST'])
 def add_to_watchlist():
     if 'user' not in session:
@@ -452,6 +483,7 @@ def add_to_watchlist():
     else:
         return jsonify(success=False, message="Movie is already in your watchlist.")
 
+# Route to display the watchlist
 @app.route('/watchlist')
 def watchlist():
     if 'user' not in session:
@@ -460,6 +492,7 @@ def watchlist():
     watchlist_movies = Watchlist.query.filter_by(username=username).all()
     return render_template('watchlist.html', watchlist_movies=watchlist_movies)
 
+# Route to remove a movie from the watchlist
 @app.route('/remove_from_watchlist', methods=['POST'])
 def remove_from_watchlist():
     data = request.get_json()
@@ -472,6 +505,7 @@ def remove_from_watchlist():
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 500
 
+# Helper function to remove a movie from the watchlist
 def remove_movie_from_watchlist(title):
     username = session.get('user')
     if not username:
@@ -482,6 +516,7 @@ def remove_movie_from_watchlist(title):
     db.session.delete(watchlist)
     db.session.commit()
 
+# Another helper function to remove a movie from the watchlist (duplicate)
 def remove_movie_watchlist(title):
     username = session.get('user')
     if not username:
@@ -492,6 +527,7 @@ def remove_movie_watchlist(title):
     db.session.delete(watchlist)
     db.session.commit()
 
+# Route to add a movie to the rating list
 @app.route('/add_to_rating', methods=['POST'])
 def add_to_rating():
     if 'user' not in session:
@@ -524,6 +560,7 @@ def add_to_rating():
     else:
         return jsonify(success=False, message="Movie already rated.")
 
+# Route to display the rating list
 @app.route('/rating')
 def rating():
     if 'user' not in session:
@@ -532,6 +569,7 @@ def rating():
     rating_movies = Rating.query.filter_by(username=username).all()
     return render_template('rating.html', rating_movies=rating_movies)
 
+# Route to remove a movie from the rating list
 @app.route('/remove_from_rating', methods=['POST'])
 def remove_from_rating():
     data = request.get_json()
@@ -544,6 +582,7 @@ def remove_from_rating():
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 500
 
+# Helper function to remove a movie from the rating list
 def remove_movie_from_rating(title):
     username = session.get('user')
     if not username:
@@ -554,6 +593,7 @@ def remove_movie_from_rating(title):
     db.session.delete(rating)
     db.session.commit()
 
+# Another helper function to remove a movie from the rating list (duplicate)
 def remove_movie_rating(title):
     username = session.get('user')
     if not username:
@@ -564,6 +604,7 @@ def remove_movie_rating(title):
     db.session.delete(rating)
     db.session.commit()
 
+# Route to rate a movie
 @app.route('/rate_movie', methods=['POST'])
 def rate_movie():
     if 'user' not in session:

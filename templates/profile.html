@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Meta tags and title -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FLUX</title>
@@ -8,6 +9,7 @@
 </head>
 <body>
 
+    <!-- Navbar -->
     <div class="navbar">
         <div>
             <a href="/dashboard" class="flux-btn">FLUX</a>
@@ -17,6 +19,7 @@
         </div>
     </div>
 
+    <!-- Profile container -->
     <div class="profile-container">
         <h2>Your Profile Information</h2>
         <div class="profile-info">
@@ -27,8 +30,10 @@
             </div>
         </div>
 
+        <!-- Update profile picture button -->
         <button class="update-btn" id="update-profile-btn">Update Profile Picture</button>
 
+        <!-- Image upload container -->
         <div id="image-upload-container" style="display: none;">
             <form id="image-upload-form" action="/update_profile_image" method="POST" enctype="multipart/form-data">
                 <input type="file" name="profile-image" accept="image/*" id="profile-image-input" style="display: none;">
@@ -36,6 +41,7 @@
             </form>
         </div>
         
+        <!-- Change username form -->
         <div class="username-change-container">
             <form action="/change_username" method="POST">
                 <label for="new-username">New Username:</label>
@@ -44,6 +50,7 @@
             </form>
         </div>
 
+        <!-- Change password form -->
         <div class="password-change-container">
             <form action="/change_password" method="POST">
                 <label for="current-password">Current Password:</label>
@@ -53,11 +60,9 @@
                 <button type="submit" class="btn-success">Update Password</button>
             </form>
         </div>
-
-        
     </div>
 
-    <!-- JavaScript code here -->
+    <!-- JavaScript for handling profile picture update -->
     <script>
         const updateProfileBtn = document.getElementById("update-profile-btn");
         const profileImageInput = document.getElementById("profile-image-input");

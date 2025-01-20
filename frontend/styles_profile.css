@@ -1,3 +1,4 @@
+/* General styles */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -5,6 +6,7 @@ body {
     color: #FFFFFF;
 }
 
+/* Navbar styles */
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -38,6 +40,7 @@ body {
     text-decoration: underline;
 }
 
+/* Profile container styles */
 .profile-container {
     width: 50%;
     margin: 50px auto;
@@ -74,6 +77,7 @@ body {
     margin: 5px 0;
 }
 
+/* Update profile picture button styles */
 .update-btn {
     padding: 10px 20px;
     background-color: #2980B9;
@@ -94,6 +98,7 @@ body {
     color: #3498DB;
 }
 
+/* Change password container styles */
 .password-change-container {
     margin-top: 20px;
     padding: 20px;
@@ -129,6 +134,7 @@ body {
     background-color: #3498DB;
 }
 
+/* Change username container styles */
 .username-change-container {
     margin-top: 20px;
     padding: 20px;
@@ -164,6 +170,7 @@ body {
     background-color: #3498DB;
 }
 
+/* Responsive styles */
 @media (max-width: 768px) {
     .profile-container {
         width: 80%;

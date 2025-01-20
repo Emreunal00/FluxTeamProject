@@ -1,3 +1,4 @@
+# List of users with their email, password, and username
 users:
 - email: user1@example.com
   password: password1
@@ -6,7 +7,7 @@ users:
   password: password2
   username: user2
 - email: eren.ergani9@gmail.com
-  password: '002345'
+  password: eren123
   username: eren
 - email: egeduyar@outlook.com
   password: ege123
@@ -21,8 +22,8 @@ users:
   password: '123'
   username: admin
 - email: umutemre2004@gmail.com
-  password: Emre2004
-  username: "Emre \xDCnal"
+  password: emre123
+  username: Emre
 - email: aaaa@gmail.com
   password: aaa
   username: aaaa
