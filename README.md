@@ -4,15 +4,15 @@
 The Movie Database System allows users to create accounts, browse movie listings, submit
 reviews, and rate films.
 It includes features such as:
-• User account management
-• Movie search and filtering
-• Detailed movie information
-• User ratings and reviews
-• Personalized favorites list
-• Watchlist management
-• Watched list tracking
-• Viewing IMDb ratings
-• Personal rating submission for films
+1. User account management
+2. Movie search and filtering
+3. Detailed movie information
+4. User ratings and reviews
+5. Personalized favorites list
+6. Watchlist management
+7. Watched list tracking
+8. Viewing IMDb ratings
+9. Personal rating submission for films
 
 ## Installation
 To install the project, follow these steps:
