@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Meta tags and title -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FLUX</title>
@@ -25,6 +26,7 @@
         <div class="profile-container">
             <button class="profile-btn">Profile</button>
             <div class="dropdown-menu">
+                <!-- Profile dropdown menu -->
                 <a href="/profile" class="dropdown-item">Edit Profile</a>
                 <a href="/favorites" class="dropdown-item">Favorites</a>
                 <a href="/watched" class="dropdown-item">Watched</a>
@@ -101,8 +103,9 @@
         {% endif %}
     </div>
 
-    <!-- JavaScript -->
+    <!-- JavaScript for handling movie actions and ratings -->
     <script>
+        // Add to favorites
         document.addEventListener('DOMContentLoaded', function() {
             const buttons = document.querySelectorAll('.add-to-favorites');
             buttons.forEach(button => {
@@ -129,6 +132,7 @@
             });
         });
 
+        // Add to watched
         document.addEventListener('DOMContentLoaded', function() {
             const buttons = document.querySelectorAll('.add-to-watched');
             buttons.forEach(button => {
@@ -155,6 +159,7 @@
             });
         });
 
+        // Add to watchlist
         document.addEventListener('DOMContentLoaded', function() {
             const buttons = document.querySelectorAll('.add-to-watchlist');
             buttons.forEach(button => {
@@ -181,6 +186,7 @@
             });
         });
 
+        // Rate movie
         document.addEventListener('DOMContentLoaded', function() {
             const stars = document.querySelectorAll('.star');
             stars.forEach(star => {

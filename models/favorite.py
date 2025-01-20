@@ -1,6 +1,8 @@
 from models import db
 
+# Define the Favorite model
 class Favorite(db.Model):
+    # Define the columns for the Favorite table
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), nullable=False)
     imdb_id = db.Column(db.String(20), nullable=False)
@@ -13,5 +15,6 @@ class Favorite(db.Model):
     poster = db.Column(db.String(300), nullable=True)
     imdb_rating = db.Column(db.String(10), nullable=True)
 
+    # Define the string representation of the Favorite object
     def __repr__(self):
         return f'<Favorite {self.title}>'

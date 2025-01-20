@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Meta tags and title -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FLUX</title>
+    <!-- CSS Link -->
     <link rel="stylesheet" href="../frontend/styles_watched.css">
 </head>
 <body>
@@ -14,6 +16,7 @@
         <div class="profile-container">
             <button class="profile-btn">Profile</button>
             <div class="dropdown-menu">
+                <!-- Profile dropdown menu -->
                 <a href="/profile" class="dropdown-item">Edit Profile</a>
                 <a href="/favorites" class="dropdown-item">Favorites</a>
                 <a href="/watched" class="dropdown-item">Watched</a>
@@ -24,11 +27,13 @@
         <a href="/logout" class="logout-btn">Logout</a>
     </div>
     
+    <!-- Watched Movies Container -->
     <div class="dashboard-container">
         <h2 style="text-align: center;">Watched Movies</h2>
         <div class="movie-container">
             {% for movie in watched_movies %}
                 <div class="movie-card" data-title="{{ movie.title }}">
+                    <!-- Movie card with poster, title, and year -->
                     <img src="{{ movie.poster or 'https://via.placeholder.com/300x450?text=No+Image' }}" alt="Movie Poster">
                     <h3>{{ movie.title }}</h3>
                     <p>{{ movie.year or 'Unknown' }}</p>
@@ -37,6 +42,7 @@
         </div>
     </div>
 
+    <!-- Movie popup for detailed view -->
     <div id="movie-popup" class="movie-popup" style="display: none;">
         <div class="popup-content">
             <span id="close-popup" class="close-popup">&times;</span>
@@ -52,7 +58,9 @@
         </div>
     </div>
 
+    <!-- JavaScript for handling movie popup and removal -->
     <script>
+        // Get elements
         const movieCards = document.querySelectorAll('.movie-card');
         const moviePopup = document.getElementById('movie-popup');
         const closePopup = document.getElementById('close-popup');
@@ -68,6 +76,7 @@
 
         let currentTitle = '';
 
+        // Add event listeners to movie cards
         movieCards.forEach(card => {
             card.addEventListener('click', () => {
                 const title = card.getAttribute('data-title');
@@ -75,6 +84,7 @@
                 fetch(`/movie_details?title=${title}`)
                     .then(response => response.json())
                     .then(data => {
+                        // Populate popup with movie details
                         popupTitle.textContent = data.Title;
                         popupPoster.src = data.Poster;
                         popupPlot.innerHTML = `<strong>Plot:</strong> ${data.Plot}`;
@@ -89,16 +99,19 @@
             });
         });
 
+        // Close popup when close button is clicked
         closePopup.addEventListener('click', () => {
             moviePopup.style.display = 'none';
         });
 
+        // Close popup when clicking outside of it
         window.addEventListener('click', (event) => {
             if (event.target === moviePopup) {
                 moviePopup.style.display = 'none';
             }
         });
 
+        // Remove movie from watched
         removeFromWatched.addEventListener('click', () => {
             fetch('/remove_from_watched', {
                 method: 'POST',

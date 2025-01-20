@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Meta tags and title -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FLUX</title>
@@ -15,6 +16,7 @@
         <div class="profile-container">
             <button class="profile-btn">Profile</button>
             <div class="dropdown-menu">
+                <!-- Profile dropdown menu -->
                 <a href="/profile" class="dropdown-item">Edit Profile</a>
                 <a href="/favorites" class="dropdown-item">Favorites</a>
                 <a href="/watched" class="dropdown-item">Watched</a>
@@ -50,6 +52,7 @@
             <div class="movie-container">
                 {% for movie in recommended_movies %}
                     <div class="movie-card" data-title="{{ movie.title }}">
+                        <!-- Movie card with poster, title, and year -->
                         <img src="{{ movie.poster }}" alt="Movie Poster">
                         <h3>{{ movie.title }}</h3>
                         <p>{{ movie.year }}</p>
@@ -59,6 +62,7 @@
         </div>
     </div>
 
+    <!-- Movie popup for detailed view -->
     <div id="movie-popup" class="movie-popup" style="display: none;">
         <div class="popup-content">
             <span id="close-popup" class="close-popup">&times;</span>
@@ -70,13 +74,17 @@
             <p id="popup-director"><strong>Director:</strong> </p>
             <p id="popup-actors"><strong>Actors:</strong> </p>
             <p id="popup-imdb"><strong>IMDb Rating:</strong> </p>
-            <button id="add-to-favorites" class="btn btn-primary">Add to Favorites</button>
-            <button id="add-to-watched" class="btn btn-primary">Add to Watched</button>
-            <button id="add-to-watchlist" class="btn btn-primary">Add to Watchlist</button>
+            <div class="popup-buttons">
+                <button id="add-to-favorites" class="btn btn-primary">Add to Favorites</button>
+                <button id="add-to-watched" class="btn btn-primary">Add to Watched</button>
+                <button id="add-to-watchlist" class="btn btn-primary">Add to Watchlist</button>
+            </div>
         </div>
     </div>
 
+    <!-- JavaScript for handling movie popup and actions -->
     <script>
+        // Get elements
         const movieCards = document.querySelectorAll('.movie-card');
         const moviePopup = document.getElementById('movie-popup');
         const closePopup = document.getElementById('close-popup');
@@ -94,12 +102,14 @@
 
         let currentMovieData = {};
 
+        // Add event listeners to movie cards
         movieCards.forEach(card => {
             card.addEventListener('click', () => {
                 const title = card.getAttribute('data-title');
                 fetch(`/movie_details?title=${title}`)
                     .then(response => response.json())
                     .then(data => {
+                        // Populate popup with movie details
                         currentMovieData = data;
                         popupTitle.textContent = data.Title;
                         popupPoster.src = data.Poster;
@@ -115,16 +125,19 @@
             });
         });
 
+        // Close popup when close button is clicked
         closePopup.addEventListener('click', () => {
             moviePopup.style.display = 'none';
         });
 
+        // Close popup when clicking outside of it
         window.addEventListener('click', (event) => {
             if (event.target === moviePopup) {
                 moviePopup.style.display = 'none';
             }
         });
 
+        // Add movie to favorites
         addToFavorites.addEventListener('click', () => {
             fetch('/add_to_favorites', {
                 method: 'POST',
@@ -141,6 +154,7 @@
             });
         });
 
+        // Add movie to watched
         addToWatched.addEventListener('click', () => {
             fetch('/add_to_watched', {
                 method: 'POST',
@@ -157,6 +171,7 @@
             });
         });
 
+        // Add movie to watchlist
         addToWatchlist.addEventListener('click', () => {
             fetch('/add_to_watchlist', {
                 method: 'POST',
@@ -169,21 +184,6 @@
             })
             .catch(error => {
                 alert('An error occurred while adding to watchlist.');
-                console.error('Error:', error);
-            });
-        });
-        addToWatchlist.addEventListener('click', () => {
-            fetch('/add_to_rating', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ movie_data: JSON.stringify(currentMovieData) })
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert(data.message);
-            })
-            .catch(error => {
-                alert('An error occurred while adding to rating list.');
                 console.error('Error:', error);
             });
         });
